@@ -1,0 +1,21 @@
+{
+  "name": "modxcms/twilio",
+  "description": "Twilio MODX Revolution 3.x",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "John Peca",
+      "email": "john@modx.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "MODX\\Twilio\\": "twilio/src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.2.0",
+    "twilio/sdk": "dev-main"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Twilio",
+  "lowCaseName": "twilio",
+  "description": "Twilio for MODX Revolution 2.x",
+  "author": "John Peca",
+  "version": "1.0.0",
+  "package": {
+    "elements": {
+      "snippets": [
+        {
+          "name": "TwilioGetPhone",
+          "file": "TwilioGetPhone.php"
+        },
+        {
+          "name": "TwilioActivation",
+          "file": "TwilioActivation.php"
+        },
+        {
+          "name": "TwilioSendVerification",
+          "file": "TwilioSendVerification.php"
+        },
+        {
+          "name": "TwilioVerify",
+          "file": "TwilioVerify.php"
+        }
+      ]
+    },
+    "systemSettings": [
+      {
+        "key": "sid",
+        "value": ""
+      },
+      {
+        "key": "token",
+        "value": "",
+        "type": "text-password"
+      },
+      {
+        "key": "service",
+        "value": ""
+      }
+    ]
+  },
+  "dependencies": [
+    {
+      "name": "formit",
+      "version": ">=4.2.0"
+    },
+    {
+      "name": "login",
+      "version": ">=1.9.0"
+    }
+  ]
+}
