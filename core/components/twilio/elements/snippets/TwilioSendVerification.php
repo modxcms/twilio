@@ -5,7 +5,7 @@
  * [[!FormIt? &hooks=`TwilioSendVerification` &submitVar=`get-validation` &validate=`channel:required` ]]
  *
  * Available options:
- * &twilioService           string      ID of the Twilio service, if empty, hook will use system setting twillio.service
+ * &twilioServiceId         string      ID of the Twilio service, if empty, hook will use system setting twillio.service
  * &twilioAllowedChannels   string      Comma delimited list of allowed channels. Available options: sms, call, email Default: sms,call
  * &twilioSendLimit         number      Time in minuted for repeated verification code requests. Use won't be able to request another code, before this time. Default: 15
  *

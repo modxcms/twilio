@@ -27,16 +27,16 @@
     },
     "systemSettings": [
       {
-        "key": "sid",
+        "key": "account_sid",
         "value": ""
       },
       {
-        "key": "token",
+        "key": "account_token",
         "value": "",
         "type": "text-password"
       },
       {
-        "key": "service",
+        "key": "service_id",
         "value": ""
       }
     ]

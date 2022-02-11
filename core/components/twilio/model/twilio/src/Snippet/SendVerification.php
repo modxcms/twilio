@@ -10,9 +10,9 @@ class SendVerification extends Snippet {
     {
         $this->modx->setPlaceholder("twilio.code_sent", '');
 
-        $sid = $this->modx->getOption('twilio.sid');
-        $token = $this->modx->getOption('twilio.token');
-        $service = $this->getOption('twilioService', $this->modx->getOption('twilio.service'));
+        $sid = $this->modx->getOption('twilio.account_sid');
+        $token = $this->modx->getOption('twilio.account_token');
+        $service = $this->getOption('twilioServiceId', $this->modx->getOption('twilio.service_id'));
 
         if (empty($sid) || empty($token) || empty($service)) {
             $this->modx->sendErrorPage();
