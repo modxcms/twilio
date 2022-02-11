@@ -1,14 +1,15 @@
 <?php
+
 namespace MODX\Twilio\Snippet;
 
-class Activation extends Snippet {
-
+class Activation extends Snippet
+{
     public function process()
     {
         $hook = $this->sp['hook'];
 
         $redirectToActivationResource = intval($this->getOption('twilioRedirectToActivationResource', 1)) === 1;
-        $activationResource = $this->getOption('twilioActivationResourceId',1);
+        $activationResource = (int) $this->getOption('twilioActivationResourceId', 1);
         $activationTTL = intval($this->getOption('twilioActivationTTL', 180)); // in minutes
         if (empty($activationTTL)) {
             $activationTTL = 180;
@@ -24,9 +25,9 @@ class Activation extends Snippet {
         $confirmParams['lp'] = $this->base64urlEncode($tempPassword);
         $confirmParams['lu'] = $this->base64urlEncode($user->get('username'));
 
-        $confirmUrl = $this->modx->makeUrl($activationResource,'', $confirmParams,'full');
+        $confirmUrl = $this->modx->makeUrl($activationResource, '', $confirmParams, 'full');
 
-        $emailTpl = $this->getOption('twilioActivationEmailTpl','');
+        $emailTpl = $this->getOption('twilioActivationEmailTpl', '');
         if (!empty($emailTpl)) {
             $emailProperties = [
                 'confirmUrl' => $confirmUrl,
@@ -49,7 +50,7 @@ class Activation extends Snippet {
         }
 
         $this->modx->getService('registry', 'registry.modRegistry');
-        $this->modx->registry->addRegister('twilio','registry.modFileRegister');
+        $this->modx->registry->addRegister('twilio', 'registry.modFileRegister');
         $this->modx->registry->twilio->connect();
         $this->modx->registry->twilio->subscribe('/activation/');
         $this->modx->registry->twilio->send('/activation/', [$user->get('username') => $tempPassword], [
