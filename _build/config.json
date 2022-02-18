@@ -22,6 +22,10 @@
         {
           "name": "TwilioVerify",
           "file": "TwilioVerify.php"
+        },
+        {
+          "name": "TwilioGetRegions",
+          "file": "TwilioGetRegions.php"
         }
       ]
     },

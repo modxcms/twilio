@@ -8,7 +8,8 @@ class SupportedRegions extends Snippet
 {
     public function process()
     {
-        $regions = PhoneNumberUtil::getSupportedRegions();
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $regions = $phoneUtil->getSupportedCallingCodes();
         $setFirst = $this->getOption('setFirst');
         $setFirstType = $this->getOption('setFirstType', 'csv');
         $selected = (int) $this->getOption('selected', 0);
@@ -26,11 +27,17 @@ class SupportedRegions extends Snippet
         $tpl = $this->getOption('tpl');
         if (empty($tpl)) {
             foreach ($regions as $region) {
+                if (empty($region)) {
+                    continue;
+                }
                 $selected = ($region === $selected) ? "selected='selected'" : '';
                 $output .= "<option value='$region' $selected>+$region</option>";
             }
         } else {
             foreach ($regions as $region) {
+                if (empty($region)) {
+                    continue;
+                }
                 $output .= $this->modx->getChunk($tpl, ['region' => $region, 'selected' => ($region === $selected) ? 1 : 0]);
             }
         }
