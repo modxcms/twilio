@@ -60,7 +60,7 @@ class SendVerification extends Snippet {
                 $hook->addError('channel', "Requesting verification code failed.");
                 return false;
             }
-
+            $extended = $profile->get('extended');
             $extended['twilio_last_send'] = $now;
             $profile->set('extended', $extended);
             $profile->save();

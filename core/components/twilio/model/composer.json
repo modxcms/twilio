@@ -16,6 +16,7 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.2.0",
-    "twilio/sdk": "dev-main"
+    "twilio/sdk": "dev-main",
+    "brick/phonenumber": "dev-master"
   }
 }
