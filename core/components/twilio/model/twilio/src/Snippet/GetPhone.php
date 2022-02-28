@@ -1,13 +1,8 @@
 <?php
-
 namespace MODX\Twilio\Snippet;
 
-use Brick\PhoneNumber\PhoneNumber;
-use Brick\PhoneNumber\PhoneNumberFormat;
-use Brick\PhoneNumber\PhoneNumberParseException;
+class GetPhone extends Snippet {
 
-class GetPhone extends Snippet
-{
     public function process()
     {
         if (empty($_REQUEST['lp']) || empty($_REQUEST['lu'])) {
@@ -64,42 +59,17 @@ class GetPhone extends Snippet
             $this->sendError();
             return;
         }
-        $extended = $profile->get('extended');
-
-        $regionField = $this->getOption('regionField', 'regioncode', true);
-        $regionFieldExtended = $this->getOption('phoneFieldExtended', true);
-        if ($regionFieldExtended) {
-            if (!empty($extended[$regionField])) {
-                $region = '+' . $this->format($extended[$regionField]);
-            }
-        } else {
-            if (!empty($profile->get($regionField))) {
-                $region = '+' . $this->format($profile->get($regionField));
-            }
-        }
 
         $phoneField = $this->getOption('phoneField', 'phone', true);
-        $phoneFieldExtended = $this->getOption('phoneFieldExtended', false);
-        if ($phoneFieldExtended) {
-            $phone = $this->format($extended[$phoneField]);
-        } else {
-            $phone = $this->format($profile->get($phoneField));
+        if ($phoneField !== 'phone') {
+            $phoneField = 'mobilephone';
         }
-        if (empty($region) && empty($phone)) {
-            $this->sendError();
-            return;
-        }
-        try {
-            $number = PhoneNumber::parse($region . $phone);
-            $this->modx->setPlaceholder('twilio.phone', $number->format(PhoneNumberFormat::E164));
-        } catch (PhoneNumberParseException $e) {
-            $this->sendError();
-            return;
-        }
+
+        $phone = $profile->get($phoneField);
+        $this->modx->setPlaceholder('twilio.phone', $phone);
     }
 
-    public function sendError($id = null)
-    {
+    public function sendError($id = null) {
         $errorPage = empty($id) ? $this->getOption('errorPage', 0, true) : $id;
         if (!empty($errorPage)) {
             $url = $this->modx->makeUrl($errorPage, '', '', 'full');
@@ -107,10 +77,5 @@ class GetPhone extends Snippet
         } else {
             $this->modx->sendErrorPage();
         }
-    }
-
-    private function format($number): int
-    {
-        return preg_replace('/\D+/', '', $number);
     }
 }

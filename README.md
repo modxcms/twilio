@@ -3,14 +3,22 @@
 ## Sample Registration page
 
 ```html
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
 [[!Register?
     &postHooks=`TwilioActivation`
     &submitVar=`registerbtn`
     &moderate=`1`
+    &customValidators=`TwilioValidatePhone`
     &twilioActivationResourceId=`2`
     &twilioActivationEmailTpl=`myActivationEmailTpl`
     &usernameField=`email`
     &validate=`nospam:blank,
+  phone:TwilioValidatePhone,
   password:required:minLength=^6^,
   password_confirm:password_confirm=^password^,
   email:required:email`
@@ -31,7 +39,7 @@
         <label for="phone">Phone
             <span class="error">[[!+reg.error.phone]]</span>
         </label>
-        <input type="text" name="phone" id="phone" value="[[!+reg.phone]]" />
+        <input type="text" id="phone" value="[[!+reg.phone]]" />
         
         <label for="password">Password
             <span class="error">[[!+reg.error.password]]</span>
@@ -48,6 +56,14 @@
         </div>
     </form>
 </div>
+
+<script>
+    var phoneInputField = document.querySelector("#phone");
+    window.intlTelInput(phoneInputField, {
+        hiddenInput: "phone",
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+</script>
 ```
 
 ## Sample Activation Page (&twilioActivationResourceId)

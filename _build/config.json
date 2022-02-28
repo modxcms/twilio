@@ -3,7 +3,7 @@
   "lowCaseName": "twilio",
   "description": "Twilio for MODX Revolution 2.x",
   "author": "John Peca",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "package": {
     "elements": {
       "snippets": [
@@ -24,8 +24,8 @@
           "file": "TwilioVerify.php"
         },
         {
-          "name": "TwilioGetRegions",
-          "file": "TwilioGetRegions.php"
+          "name": "TwilioValidatePhone",
+          "file": "TwilioValidatePhone.php"
         }
       ]
     },
