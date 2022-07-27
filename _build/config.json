@@ -26,6 +26,10 @@
         {
           "name": "TwilioValidatePhone",
           "file": "TwilioValidatePhone.php"
+        },
+        {
+          "name": "TwilioCreateTOTP",
+          "file": "TwilioCreateTOTP.php"
         }
       ]
     },
@@ -41,6 +45,10 @@
       },
       {
         "key": "service_id",
+        "value": ""
+      },
+      {
+        "key": "encryption_key",
         "value": ""
       }
     ]

@@ -1,7 +1,10 @@
 <?php
+
 namespace MODX\Twilio;
 
-class Utils {
+class Utils
+{
+
     public static function explodeAndClean($array, $delimiter = ',')
     {
         $array = explode($delimiter, $array);            // Explode fields to array

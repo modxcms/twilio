@@ -15,6 +15,8 @@ class Twilio {
         $this->modx =& $modx;
 
         $corePath = $this->getOption('core_path', $options, $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/twilio/');
+        $assetsPath = $this->getOption('assets_path', $options, $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH) . 'components/twilio/');
+        $assetsUrl = $this->getOption('assets_url', $options, $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/twilio/');
 
         /* loads some default paths for easier management */
         $this->options = array_merge([
@@ -22,6 +24,12 @@ class Twilio {
             'corePath' => $corePath,
             'modelPath' => $corePath . 'model/',
             'snippetsPath' => $corePath . 'elements/snippets/',
+            'templatesPath' => $corePath . 'templates/',
+            'assetsPath' => $assetsPath,
+            'assetsUrl' => $assetsUrl,
+            'jsUrl' => $assetsUrl . 'js/',
+            'cssUrl' => $assetsUrl . 'css/',
+            'connectorUrl' => $assetsUrl . 'connector.php'
         ], $options);
 
         $this->modx->addPackage('twilio', $this->getOption('modelPath'));

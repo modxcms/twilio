@@ -9,6 +9,7 @@
  * &twilioAutoLogIn             number      If set to 1, user will be automatically logged in after completing the verification. Default: 1
  * &twilioAuthenticateContexts  string      Comma delimited list of context to log in user to after verification. Default: current context
  * &twilioRedirect              number      Resource ID where to redirect user after success verification. Default: empty
+ * &twilioFactorType            string      The verification factor type (phone, totp) Default: phone
  *
  * @var modX $modx
  * @var array $scriptProperties
