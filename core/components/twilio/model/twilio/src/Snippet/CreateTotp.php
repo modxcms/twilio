@@ -6,7 +6,6 @@ use Twilio\Rest\Client;
 
 class CreateTotp extends Snippet
 {
-
     public function process()
     {
         $sid = $this->modx->getOption('twilio.account_sid');
@@ -24,14 +23,14 @@ class CreateTotp extends Snippet
 
         try {
             $twilio = new Client($sid, $token);
+            $site = $this->modx->getOption('site_name');
             $verification_check = $twilio->verify->v2->services($service)
                 ->entities(str_pad($user->id, 8, '0', STR_PAD_LEFT))
                 ->newFactors
-                ->create("User $user->id", "totp");
+                ->create($site, "totp");
 
 
             if ($verification_check->status === 'unverified') {
-                $this->modx->log(1, json_encode($verification_check->binding, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
                 $profile = $user->getOne('Profile');
                 $extended = $profile->get('extended');
                 if (!is_array($extended)) {
@@ -45,12 +44,26 @@ class CreateTotp extends Snippet
                 );
                 $profile->set('extended', $extended);
                 if (!$profile->save()) {
-                    $this->modx->log(1, "[Twilio Create TOTP] Failed to save profile");
+                    $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save profile");
+                    return false;
                 }
+                $setting = $this->modx->getObject(
+                    'modUserSetting',
+                    array('user' => $user->id, 'key' => 'twilio.totp')
+                );
+                if (!$setting) {
+                    $setting = $this->modx->newObject('modUserSetting');
+                    $setting->set('user', $user->id);
+                    $setting->set('key', 'twilio.totp');
+                    $setting->set('xtype', 'combo-boolean');
+                }
+                $setting->set('value', 1);
+                $setting->save();
+                return true;
             }
             return false;
         } catch (\Exception $e) {
-            $this->modx->log(1, "[Twilio Create TOTP] " . $e->getMessage());
+            $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] " . $e->getMessage());
             return false;
         }
     }

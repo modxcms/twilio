@@ -31,6 +31,16 @@
           "name": "TwilioCreateTOTP",
           "file": "TwilioCreateTOTP.php"
         }
+      ],
+      "plugins": [
+        {
+          "name": "Twilio",
+          "file": "Twilio.php",
+          "events": [
+            "OnBeforeManagerPageInit",
+            "OnManagerPageInit"
+          ]
+        }
       ]
     },
     "systemSettings": [
@@ -50,6 +60,11 @@
       {
         "key": "encryption_key",
         "value": ""
+      },
+      {
+        "key": "enforce_totp",
+        "value": "0",
+        "type": "combo-boolean"
       }
     ]
   },
