@@ -7,9 +7,19 @@ class TwilioTotpStatusProcessor extends modProcessor
 
     public function process()
     {
-        $id = $this->getProperty('user');
-        $status = $this->getProperty('status');
+        $ids = explode(',', $this->getProperty('user')) ?? [];
+        $success = true;
+        foreach ($ids as $id) {
+            if (!$this->handleUser($id)) {
+                $success = false;
+            }
+        }
+        return $success ? $this->success() : $this->failure();
+    }
 
+    public function handleUser($id): bool
+    {
+        $status = $this->getProperty('status');
         $user = $this->modx->getObject('modUser', $id);
 
         if ($user) {
@@ -23,10 +33,10 @@ class TwilioTotpStatusProcessor extends modProcessor
             $setting->set('value', $status);
             $setting->save();
 
-            return $this->success('', $setting);
+            return true;
         }
 
-        return $this->failure();
+        return false;
     }
 }
 return 'TwilioTotpStatusProcessor';

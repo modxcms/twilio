@@ -5,6 +5,14 @@
   "author": "John Peca",
   "version": "1.1.0",
   "package": {
+    "menus": [
+      {
+        "text": "twilio.users",
+        "description": "twilio.users.desc",
+        "action": "users",
+        "permissions": "twilio_manage_auth"
+      }
+    ],
     "elements": {
       "snippets": [
         {
@@ -58,15 +66,27 @@
         "value": ""
       },
       {
-        "key": "encryption_key",
-        "value": ""
-      },
-      {
-        "key": "enforce_totp",
+        "key": "totp_enforce",
         "value": "0",
         "type": "combo-boolean"
+      },
+      {
+        "key": "totp_email_on_login",
+        "value": "0",
+        "type": "combo-boolean"
+      },
+      {
+        "key": "totp_challenge_page",
+        "value": "0",
       }
     ]
+  },
+  "build" : {
+    "resolver" : {
+      "after" : [
+        "acls.php"
+      ]
+    }
   },
   "dependencies": [
     {

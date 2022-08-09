@@ -89,11 +89,11 @@ class Verify extends Snippet
             $twilio = new Client($this->sid, $this->token);
             $verification_check = $twilio->verify->v2->services($this->service)
                 ->entities(str_pad($user->id, 8, '0', STR_PAD_LEFT))
-                ->challenges
-                ->create($userTwilio['sid'], ["authPayload" => $code]);
+                ->factors($userTwilio['sid'])
+                ->update(["authPayload" => $code]);
 
 
-            if ($verification_check->status === 'approved') {
+            if ($verification_check->status === 'verified') {
                 $extended['twilio_totp']['status'] = 'verified';
                 $profile->set('extended', $extended);
                 if ($profile->save()) {

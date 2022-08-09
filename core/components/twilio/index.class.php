@@ -2,7 +2,12 @@
 
 abstract class TwilioBaseManagerController extends modExtraManagerController
 {
-    public $twilio;
+    public string $version = '1.0.0';
+
+    public function checkPermissions()
+    {
+        return $this->modx->hasPermission('twilio_manage_auth');
+    }
 
     public function initialize()
     {
@@ -23,12 +28,11 @@ abstract class TwilioBaseManagerController extends modExtraManagerController
                 'core_path' => $corePath
             )
         );
-
-        $this->addCss($this->twilio->getOption('cssUrl') . 'mgr.css');
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/twilio.js');
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');
         $extended = $profile->get('extended');
+        unset($extended['twilio_top']['binding']);
         $userTwilio = $extended['twilio_totp'];
         $userTwilio['user'] = $user->id;
 

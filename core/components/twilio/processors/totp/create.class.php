@@ -16,7 +16,18 @@ class TotpCreateProcessor extends modProcessor
             return $this->failure();
         }
 
-        $id = $this->getProperty('user');
+        $ids = explode(',', $this->getProperty('user')) ?? [];
+        $success = true;
+        foreach ($ids as $id) {
+            if (!$this->handleUser($id)) {
+                $success = false;
+            }
+        }
+        return $success ? $this->success() : $this->failure();
+    }
+
+    public function handleUser($id): bool
+    {
         $user = $this->modx->getObject('modUser', $id);
 
         if ($user) {
@@ -48,7 +59,7 @@ class TotpCreateProcessor extends modProcessor
                     $profile->set('extended', $extended);
                     if (!$profile->save()) {
                         $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save profile");
-                        return $this->failure();
+                        return false;
                     }
                     $setting = $this->modx->getObject(
                         'modUserSetting',
@@ -62,16 +73,16 @@ class TotpCreateProcessor extends modProcessor
                     }
                     $setting->set('value', 1);
                     $setting->save();
-                    return $this->success('', $extended['twilio_totp']);
+                    return true;
                 }
                 return false;
             } catch (\Exception $e) {
                 $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] " . $e->getMessage());
-                return $this->failure();
+                return false;
             }
         }
 
-        return $this->failure();
+        return false;
     }
 }
 return 'TotpCreateProcessor';

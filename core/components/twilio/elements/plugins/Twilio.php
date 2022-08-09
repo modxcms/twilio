@@ -8,6 +8,6 @@ if (class_exists($className)) {
     $event = new $className($twilio, $scriptProperties);
     $event->run();
 } else {
-    $modx->log(1, "Class {$className} not found");
+    $modx->log(\xPDO::LOG_LEVEL_ERROR, "Class {$className} not found");
 }
 return;
