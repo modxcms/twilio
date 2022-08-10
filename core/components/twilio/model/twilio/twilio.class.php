@@ -64,4 +64,28 @@ class Twilio {
     {
         require_once $this->getOption('modelPath') . 'vendor/autoload.php';
     }
+
+    public function getCode($user)
+    {
+        $profile = $user->getOne('Profile');
+        $extended = $profile->get('extended');
+        $secret = $extended['twilio_totp']['binding']['secret'] ?? null;
+        if ($secret) {
+            $base32 = new FixedBitNotation(5, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567', true, true);
+            $secret = $base32->decode($secret);
+            $time = floor(time() / 30);
+            $time = pack("N", $time);
+            $time = str_pad($time, 8, chr(0), STR_PAD_LEFT);
+            $hash = hash_hmac('sha1', $time, $secret, true);
+            $offset = ord(substr($hash, -1));
+            $offset &= 0xF;
+
+            $truncatedHash = substr($hash, $offset);
+            $truncatedHash = unpack("N", substr($truncatedHash, 0, 4));
+            $truncatedHash = $truncatedHash[1] & 0x7FFFFFFF;
+
+            return str_pad($truncatedHash % (10 ** 6), 6, "0", STR_PAD_LEFT);
+        }
+        return null;
+    }
 }

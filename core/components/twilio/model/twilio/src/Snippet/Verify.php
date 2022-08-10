@@ -97,6 +97,18 @@ class Verify extends Snippet
                 $extended['twilio_totp']['status'] = 'verified';
                 $profile->set('extended', $extended);
                 if ($profile->save()) {
+                    $setting = $this->modx->getObject(
+                        'modUserSetting',
+                        array('user' => $user->id, 'key' => 'twilio.totp')
+                    );
+                    if (!$setting) {
+                        $setting = $this->modx->newObject('modUserSetting');
+                        $setting->set('user', $user->id);
+                        $setting->set('key', 'twilio.totp');
+                        $setting->set('xtype', 'combo-boolean');
+                    }
+                    $setting->set('value', 1);
+                    $setting->save();
                     $_SESSION['twilio_totp_verified'] = true;
                     $this->redirect();
                 }
@@ -144,14 +156,6 @@ class Verify extends Snippet
         $contexts = Utils::explodeAndClean($contexts);
         foreach ($contexts as $ctx) {
             $this->modx->user->addSessionContext($ctx);
-        }
-    }
-
-    private function redirect()
-    {
-        $redirect = (int)$this->getOption('twilioRedirect', 0);
-        if (!empty($redirect)) {
-            $this->modx->sendRedirect($this->modx->makeUrl($redirect));
         }
     }
 }

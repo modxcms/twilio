@@ -4,7 +4,7 @@ namespace MODX\Twilio\Snippet;
 
 use Twilio\Rest\Client;
 
-class Challenge extends Snippet
+class TotpChallenge extends Snippet
 {
     private string $sid;
     private string $token;
@@ -44,6 +44,7 @@ class Challenge extends Snippet
                 if ($profile->save()) {
                     $_SESSION['twilio_totp_verified'] = true;
                 }
+                $this->redirect();
                 return true;
             }
             $hook->addError('code', 'Invalid code');

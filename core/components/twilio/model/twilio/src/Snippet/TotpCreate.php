@@ -4,7 +4,7 @@ namespace MODX\Twilio\Snippet;
 
 use Twilio\Rest\Client;
 
-class CreateTotp extends Snippet
+class TotpCreate extends Snippet
 {
     public function process()
     {
@@ -47,18 +47,7 @@ class CreateTotp extends Snippet
                     $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save profile");
                     return false;
                 }
-                $setting = $this->modx->getObject(
-                    'modUserSetting',
-                    array('user' => $user->id, 'key' => 'twilio.totp')
-                );
-                if (!$setting) {
-                    $setting = $this->modx->newObject('modUserSetting');
-                    $setting->set('user', $user->id);
-                    $setting->set('key', 'twilio.totp');
-                    $setting->set('xtype', 'combo-boolean');
-                }
-                $setting->set('value', 1);
-                $setting->save();
+                $this->redirect();
                 return true;
             }
             return false;
