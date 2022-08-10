@@ -1,4 +1,23 @@
 twilio.panel.Totp = function (config) {
+    var twilioDeviceId = localStorage.getItem('twilio_device_id');
+    var generateId = function (length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+    if (twilioDeviceId == null) {
+        twilioDeviceId = generateId(16);
+        localStorage.setItem('twilio_device_id', twilioDeviceId);
+    } else {
+        if (MODx.request.device_id == null) {
+            MODx.loadPage('totp', 'namespace=twilio&device_id=' + twilioDeviceId);
+        }
+    }
     config = config || {};
     Ext.applyIf(config,{
         border: false
@@ -37,9 +56,18 @@ twilio.panel.Totp = function (config) {
                 xtype: 'hidden',
                 value: twilio.config.user.status === 'verified' ? 'totp/challenge' :  'totp/verify'
             },{
+                name: 'devicecode',
+                xtype: 'hidden',
+                value: twilioDeviceId
+            },{
                 name: 'code',
                 fieldLabel: _('twilio.2fa.code'),
                 xtype: 'textfield',
+                anchor: '100%',
+            },{
+                name: 'rememberdevice',
+                boxLabel: _('twilio.2fa.rememberdevice'),
+                xtype: 'checkbox',
                 anchor: '100%',
             }],
             buttons: [

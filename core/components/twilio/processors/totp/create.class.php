@@ -7,12 +7,16 @@ class TotpCreateProcessor extends modProcessor
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
 
+    private string $sid;
+    private string $token;
+    private string $service;
+
     public function process()
     {
-        $sid = $this->modx->getOption('twilio.account_sid');
-        $token = $this->modx->getOption('twilio.account_token');
-        $service = $this->modx->getOption('twilio.service_id');
-        if (empty($sid) || empty($token) || empty($service)) {
+        $this->sid = $this->modx->getOption('twilio.account_sid');
+        $this->token = $this->modx->getOption('twilio.account_token');
+        $this->service = $this->modx->getOption('twilio.service_id');
+        if (empty($this->sid) || empty($this->token) || empty($this->service)) {
             return $this->failure();
         }
 
@@ -32,9 +36,9 @@ class TotpCreateProcessor extends modProcessor
 
         if ($user) {
             try {
-                $twilio = new Client($sid, $token);
+                $twilio = new Client($this->sid, $this->token);
                 $site = $this->modx->getOption('site_name');
-                $verification_check = $twilio->verify->v2->services($service)
+                $verification_check = $twilio->verify->v2->services($this->service)
                     ->entities(str_pad($user->id, 8, '0', STR_PAD_LEFT))
                     ->newFactors
                     ->create($site, "totp");

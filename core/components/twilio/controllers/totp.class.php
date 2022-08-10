@@ -7,11 +7,13 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
 {
     public function process(array $scriptProperties = array())
     {
+        $deviceID = $_REQUEST['device_id'] ?? null;
         if (isset($_SESSION['twilio_totp_verified']) && $_SESSION['twilio_totp_verified']) {
             $this->modx->sendRedirect(MODX_MANAGER_URL);
         }
-        if ($this->modx->getOption('twilio.totp_email_on_login', null, false)) {
-            $user = $this->modx->user;
+        $user = $this->modx->user;
+        $this->checkDevice($deviceID, $user);
+        if ($this->modx->getOption('twilio.totp_email_on_login', null, false) && !empty($deviceID)) {
             $lang = $user->getOption('manager_language');
             $this->modx->lexicon->load("$lang:twilio:email");
             $code = $this->twilio->getCode($user);
@@ -46,5 +48,20 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
     public function getTemplateFile()
     {
         return $this->twilio->getOption('templatesPath') . 'totp.tpl';
+    }
+
+    public function checkDevice($device, $user)
+    {
+        $profile = $user->getOne('Profile');
+        $extended = $profile->get('extended');
+        $userTwilio = $extended['twilio_totp'];
+        if (
+            !empty($device) &&
+            !empty($userTwilio['remembered']) &&
+            in_array($device, $userTwilio['remembered'], true)
+        ) {
+            $_SESSION['twilio_totp_verified'] = true;
+            $this->modx->sendRedirect(MODX_MANAGER_URL);
+        }
     }
 }

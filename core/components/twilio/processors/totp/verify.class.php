@@ -18,6 +18,8 @@ class TotpVerifyProcessor extends modProcessor
 
         $id = $this->getProperty('user');
         $code = $this->getProperty('code');
+        $deviceCode = $this->getProperty('devicecode');
+        $remember = $this->getProperty('rememberdevice');
 
         $user = $this->modx->getObject('modUser', $id);
         if ($user) {
@@ -33,7 +35,14 @@ class TotpVerifyProcessor extends modProcessor
 
 
                 if ($verification_check->status === 'verified') {
-                    $extended['twilio_totp']['status'] = 'verified';
+                    if (!empty($deviceCode) && !empty($remember)) {
+                        if (empty($userTwilio['remembered'])) {
+                            $userTwilio['remembered'] = array();
+                        }
+                        $userTwilio['remembered'][] = $deviceCode;
+                    }
+                    $userTwilio['status'] = 'verified';
+                    $extended['twilio_totp'] = $userTwilio;
                     $profile->set('extended', $extended);
                     if ($profile->save()) {
                         $_SESSION['twilio_totp_verified'] = true;
