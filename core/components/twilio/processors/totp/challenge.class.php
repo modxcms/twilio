@@ -43,6 +43,7 @@ class TotpVerifyProcessor extends modProcessor
                     }
                     $extended['twilio_totp'] = $userTwilio;
                     $profile->set('extended', $extended);
+                    $profile->set('failedlogincount', 0);
                     if ($profile->save()) {
                         $_SESSION['twilio_totp_verified'] = true;
                     }

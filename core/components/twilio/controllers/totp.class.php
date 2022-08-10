@@ -62,6 +62,20 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
         ) {
             $_SESSION['twilio_totp_verified'] = true;
             $this->modx->sendRedirect(MODX_MANAGER_URL);
+        } elseif (!empty($device)) {
+            $failed = $profile->get('failedlogincount') ?? 0;
+            ++$failed;
+            if ($failed > $this->modx->getOption('failed_login_attempts', null, 5)) {
+                $profile->set('blockeduntil', time() + ($this->modx->getOption('blocked_minutes', null, 60) * 60));
+                $profile->set('blocked', 1);
+                $failed = 0;
+            }
+            $profile->set('failedlogincount', $failed);
+            $profile->save();
+            if ($profile->get('blocked') === 1) {
+                $this->modx->runProcessor('security/logout');
+                $this->modx->sendRedirect(MODX_MANAGER_URL);
+            }
         }
     }
 }
