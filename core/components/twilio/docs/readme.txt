@@ -2,7 +2,7 @@
 
 Twilio is a verification service that allows you to send a code to a user's phone or use a time-based one time password to verify their identity. You can find more information on Twilio at [https://www.twilio.com/](https://www.twilio.com/). This is not a free service, so you will need to sign up for a Twilio account. Each successful verification will cost you $0.05, so this is something to consider before implementing.
 
-## Phone Verification 
+## Phone Verification
 
 ###  Sample Registration page
 
@@ -44,7 +44,7 @@ Twilio is a verification service that allows you to send a code to a user's phon
             <span class="error">[[!+reg.error.phone]]</span>
         </label>
         <input type="text" id="phone" value="[[!+reg.phone]]" />
-        
+
         <label for="password">Password
             <span class="error">[[!+reg.error.password]]</span>
         </label>
@@ -174,5 +174,5 @@ Create a page with the following content:
 
 ## Manager Page
 
-Twilio 2FA Verification can be enabled in the manager login as well. You can view the status of Twilio 2FA for each user in the menu under 
+Twilio 2FA Verification can be enabled in the manager login as well. You can view the status of Twilio 2FA for each user in the menu under
 "Extras -> User Authentication"
