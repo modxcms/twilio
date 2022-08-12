@@ -5,16 +5,19 @@ use MODX\Twilio\Utils;
 use Twilio\Rest\Client;
 
 class SendVerification extends Snippet {
+    private string $sid;
+    private string $token;
+    private string $service;
 
     public function process()
     {
         $this->modx->setPlaceholder("twilio.code_sent", '');
 
-        $sid = $this->modx->getOption('twilio.account_sid');
-        $token = $this->modx->getOption('twilio.account_token');
-        $service = $this->getOption('twilioServiceId', $this->modx->getOption('twilio.service_id'));
+        $this->sid = $this->modx->getOption('twilio.account_sid');
+        $this->token = $this->modx->getOption('twilio.account_token');
+        $this->service = $this->getOption('twilioServiceId', $this->modx->getOption('twilio.service_id'));
 
-        if (empty($sid) || empty($token) || empty($service)) {
+        if (empty($this->sid) || empty($this->token) || empty($this->service)) {
             $this->modx->sendErrorPage();
             return false;
         }
@@ -50,9 +53,9 @@ class SendVerification extends Snippet {
         }
 
         try {
-            $twilio = new Client($sid, $token);
+            $twilio = new Client($this->sid, $this->token);
 
-            $verification = $twilio->verify->v2->services($service)
+            $verification = $twilio->verify->v2->services($this->service)
                 ->verifications
                 ->create($this->modx->getPlaceholder('twilio.phone'), $channel);
 

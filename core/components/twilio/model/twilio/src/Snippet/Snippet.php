@@ -51,4 +51,12 @@ abstract class Snippet
     public function base64urlDecode($str) {
         return base64_decode(str_pad(strtr($str, '-_', '+/'), strlen($str) % 4, '=', STR_PAD_RIGHT));
     }
+
+    protected function redirect()
+    {
+        $redirect = (int)$this->getOption('twilioRedirect', null);
+        if ($redirect > 0) {
+            $this->modx->sendRedirect($this->modx->makeUrl($redirect));
+        }
+    }
 }
