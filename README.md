@@ -1,6 +1,10 @@
-# Twilio
+# Twilio Verify
 
-## Sample Registration page
+Twilio is a verification service that allows you to send a code to a user's phone or use a time-based one time password to verify their identity. You can find more information on Twilio at [https://www.twilio.com/](https://www.twilio.com/). This is not a free service, so you will need to sign up for a Twilio account. Each successful verification will cost you $0.05, so this is something to consider before implementing.
+
+## Phone Verification 
+
+###  Sample Registration page
 
 ```html
 <link
@@ -66,7 +70,7 @@
 </script>
 ```
 
-## Sample Activation Page (&twilioActivationResourceId)
+### Sample Activation Page (&twilioActivationResourceId)
 
 ```html
 [[!TwilioGetPhone]]
@@ -108,3 +112,67 @@ Phone: [[!+twilio.phone]]
     </div>
 </form>
 ```
+
+## Time-based One Time Password
+
+### Sample Challenge Page
+
+Create a challenge page and set the system setting `twilio.totp_challenge_page` to the page ID.
+
+```html
+[[!FormIt?
+    &hooks=`TwilioTOTPChallenge,TwilioVerify`
+    &twilioRedirect=`4` // ID of the page to redirect to after verification
+    &twilioFactorType=`totp`
+    &validate=`code:required`
+]]
+<form method="post">
+    <label>
+        Enter 2FA Code
+        <input name="code" value="" />
+    </label>
+    <button type="submit">Submit</button>
+</form>
+```
+
+### Sample Create/Reset Token Page
+
+Create a page with the following content:
+
+```html
+[[TwilioTOTPCreate?twilioRedirect=`4`]]
+```
+
+### Sample Profile Page
+
+```html
+[[!TwilioTOTPqr]]
+
+[[!+twilio.qr:ne=``:then=`
+    <img src="[[!+twilio.qr]]" />
+    <p>Secret [[!+twilio.secret]]</p>
+    [[!+twilio.status:is=`unverified`:then=`
+        <p><a href="[[~5]]"><strong>Verify 2FA Code Before Next Login</strong></a></p> <!-- link to challenge page -->
+    `:else=``]]
+    <p><a href="[[~6]]">Refresh 2FA</a><br /> <!-- link to create / refresh page -->
+    <a href="[[~6?status=`disable_totp`]]">Disable 2FA</a></p>
+`:else=`
+    <a href="[[~6]]">Enable 2FA</a>
+`]]
+```
+
+## System Settings
+
+| key | description                                                                                                |
+| --- |------------------------------------------------------------------------------------------------------------|
+| twilio.account_sid | Twilio Account SID - Found under Account Info here https://console.twilio.com/                             |
+| twilio.account_token | Twilio Auth Token - Found under Account Info here https://console.twilio.com/                              |
+| twilio.service_id | Twilio Service ID - Found under Services Page here https://console.twilio.com/us1/develop/verify/services  |
+| twilio.totp_enforce | Enforce 2FA for all users                                                                                  |
+| twilio.totp_email_on_login | Email a code to the user when they login                                                                   |
+| twilio.totp_challenge_page | Page ID of the challenge page                                                                              |
+
+## Manager Page
+
+Twilio 2FA Verification can be enabled in the manager login as well. You can view the status of Twilio 2FA for each user in the menu under 
+"Extras -> User Authentication"

@@ -17,8 +17,9 @@ class TotpQR extends Snippet
             $userTwilio = $extended['twilio_totp'];
             $uri = $userTwilio['binding']['uri'];
             $qr = 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' . urlencode($uri);
-            $this->modx->setPlaceholder('twilio.secret', $userTwilio['binding']['secret']);
             $this->modx->setPlaceholder('twilio.qr', $qr);
+            $this->modx->setPlaceholder('twilio.secret', $userTwilio['binding']['secret']);
+            $this->modx->setPlaceholder('twilio.status', $userTwilio['status']);
         }
     }
 }

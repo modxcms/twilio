@@ -11,6 +11,7 @@ class TotpCreate extends Snippet
         $sid = $this->modx->getOption('twilio.account_sid');
         $token = $this->modx->getOption('twilio.account_token');
         $service = $this->getOption('twilioServiceId', $this->modx->getOption('twilio.service_id'));
+        $status = ($this->modx->getOption('status', $_REQUEST, null) === 'disable_totp') ? 0 : 1;
 
         if (empty($sid) || empty($token) || empty($service)) {
             $this->modx->sendErrorPage();
@@ -18,7 +19,26 @@ class TotpCreate extends Snippet
         }
         $user = $this->modx->user;
         if (!$user || $user->id === 0) {
+            $this->modx->sendErrorPage();
             return false;
+        }
+
+        $setting = $this->modx->getObject('modUserSetting', array('user' => $user->id, 'key' => 'twilio.totp'));
+        if (!$setting) {
+            $setting = $this->modx->newObject('modUserSetting');
+            $setting->set('user', $user->id);
+            $setting->set('key', 'twilio.totp');
+            $setting->set('xtype', 'combo-boolean');
+        }
+        $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] setting = ".$status." REQUEST = ".$_REQUEST['status']);
+        if ($status === 0) {
+            $setting->set('value', $status);
+            if (!$setting->save()) {
+                $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save user setting");
+                return false;
+            }
+            $this->redirect();
+            return true;
         }
 
         try {
@@ -47,6 +67,12 @@ class TotpCreate extends Snippet
                     $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save profile");
                     return false;
                 }
+                $setting->set('value', $status);
+                if (!$setting->save()) {
+                    $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save user setting");
+                    return false;
+                }
+                $_SESSION['twilio_totp_verified'] = true;
                 $this->redirect();
                 return true;
             }

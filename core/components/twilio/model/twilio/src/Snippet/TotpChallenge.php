@@ -31,6 +31,9 @@ class TotpChallenge extends Snippet
         $profile = $user->getOne('Profile');
         $extended = $profile->get('extended');
         $userTwilio = $extended['twilio_totp'];
+        if ($userTwilio['status'] !== 'verified') {
+            return true;
+        }
         try {
             $twilio = new Client($this->sid, $this->token);
             $verification_check = $twilio->verify->v2->services($this->service)

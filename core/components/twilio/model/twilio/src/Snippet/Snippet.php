@@ -54,8 +54,8 @@ abstract class Snippet
 
     protected function redirect()
     {
-        $redirect = (int)$this->getOption('twilioRedirect', 0);
-        if (!empty($redirect)) {
+        $redirect = (int)$this->getOption('twilioRedirect', null);
+        if ($redirect > 0) {
             $this->modx->sendRedirect($this->modx->makeUrl($redirect));
         }
     }
