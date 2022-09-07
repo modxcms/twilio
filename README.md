@@ -1,6 +1,6 @@
 # Twilio Verify
 
-Twilio is a verification service that allows you to send a code to a user's phone or use a time-based one time password to verify their identity. You can find more information on Twilio at [https://www.twilio.com/](https://www.twilio.com/). This is not a free service, so you will need to sign up for a Twilio account. Each successful verification will cost you $0.05, so this is something to consider before implementing.
+Twilio is a verification service that allows you to send a code to a user's phone or use a time-based one time password to verify their identity. You can find more information on Twilio at [https://www.twilio.com/](https://www.twilio.com/referral/BSq3ra). This is not a free service, so you will need to sign up for a Twilio account. Each successful verification will cost you $0.05, so this is something to consider before implementing.
 
 ## Phone Verification 
 
