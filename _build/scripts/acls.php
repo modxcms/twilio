@@ -1,32 +1,35 @@
 <?php
 
+use MODX\Revolution\modAccessPermission;
+use MODX\Revolution\modX;
 use xPDO\Transport\xPDOTransport;
 
-if ($object->xpdo) {
-    switch ($options[xPDOTransport::PACKAGE_ACTION]) {
-        case xPDOTransport::ACTION_INSTALL:
-        case xPDOTransport::ACTION_UPGRADE:
-            /** @var modX $modx */
-            $modx =& $object->xpdo;
+/**
+ * @var xPDOTransport $transport
+ * @var array $object
+ * @var array $options
+ */
 
-            $permissions = array('twilio_manage_auth');
+if ($options[xPDOTransport::PACKAGE_ACTION] === xPDOTransport::ACTION_UNINSTALL) {
+    return true;
+}
 
-            foreach ($permissions as $permission) {
-                $accessPermission = $modx->getObject('modAccessPermission', array(
-                    'template' => 1,
-                    'name' => $permission
-                ));
+/** @var modX $modx */
+$modx =& $transport->xpdo;
 
-                if (!$accessPermission) {
-                    $accessPermission = $modx->newObject('modAccessPermission');
-                    $accessPermission->set('template', 1);
-                    $accessPermission->set('name', $permission);
-                    $accessPermission->set('value', 1);
-                    $accessPermission->save();
-                }
-            }
+$permissions = ['twilio_manage_auth'];
 
-            break;
+foreach ($permissions as $permission) {
+    $accessPermission = $modx->getObject(modAccessPermission::class, [
+        'template' => 1,
+        'name' => $permission,
+    ]);
+
+    if (!$accessPermission) {
+        $accessPermission = $modx->newObject(modAccessPermission::class);
+        $accessPermission->set('template', 1);
+        $accessPermission->set('name', $permission);
+        $accessPermission->set('value', 1);
+        $accessPermission->save();
     }
 }
-return true;
