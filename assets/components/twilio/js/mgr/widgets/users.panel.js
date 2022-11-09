@@ -10,6 +10,7 @@ twilio.panel.Users = function (config) {
             ,cls: 'modx-page-header'
         }, {
             xtype: 'twilio-grid-users',
+            cls: 'main-wrapper',
         }]
     });
     twilio.panel.Users.superclass.constructor.call(this,config);

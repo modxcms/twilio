@@ -125,7 +125,7 @@ Ext.extend(twilio.grid.Users, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'totp/status',
+                action: 'MODX\\Twilio\\Processors\\TOTP\\Status',
                 user: ids,
                 status: 1,
             },
@@ -151,7 +151,7 @@ Ext.extend(twilio.grid.Users, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'totp/status',
+                action: 'MODX\\Twilio\\Processors\\TOTP\\Status',
                 user: ids,
                 status: 0,
             },
@@ -170,7 +170,7 @@ Ext.extend(twilio.grid.Users, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'totp/clear',
+                action: 'MODX\\Twilio\\Processors\\TOTP\\Clear',
                 user: r.id,
             },
             listeners: {
@@ -195,7 +195,7 @@ Ext.extend(twilio.grid.Users, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'totp/create',
+                action: 'MODX\\Twilio\\Processors\\TOTP\\Create',
                 user: ids,
             },
             listeners: {
@@ -220,7 +220,7 @@ Ext.extend(twilio.grid.Users, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.config.url,
             params: {
-                action: 'totp/email',
+                action: 'MODX\\Twilio\\Processors\\TOTP\\Email',
                 user: ids,
             },
             listeners: {
