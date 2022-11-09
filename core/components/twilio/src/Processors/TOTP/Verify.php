@@ -1,5 +1,5 @@
 <?php
-namespace MODX\Twilio\Processor\TOTP;
+namespace MODX\Twilio\Processors\TOTP;
 
 use Twilio\Rest\Client;
 use MODX\Revolution\Processors\Processor;

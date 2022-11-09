@@ -1,5 +1,5 @@
 <?php
-namespace MODX\Twilio\Processor\Users;
+namespace MODX\Twilio\Processors\Users;
 
 use MODX\Revolution\Processors\Model\GetListProcessor;
 use xPDO\Om\xPDOObject;
