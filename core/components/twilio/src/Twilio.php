@@ -3,23 +3,40 @@
 namespace MODX\Twilio;
 
 require_once dirname(__FILE__, 2) . '/lib/FixedBitNotation.php';
+
+use FixedBitNotation;
+use MODX\Revolution\modX;
 /**
  * The main Twilio service class.
  *
  * @package twilio
  */
-class Twilio {
+class Twilio
+{
     public $modx = null;
     public $namespace = 'twilio';
     public $cache = null;
     public $options = [];
 
-    public function __construct(modX &$modx, array $options = []) {
+    public function __construct(modX &$modx, array $options = [])
+    {
         $this->modx =& $modx;
 
-        $corePath = $this->getOption('core_path', $options, $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/twilio/');
-        $assetsPath = $this->getOption('assets_path', $options, $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH) . 'components/twilio/');
-        $assetsUrl = $this->getOption('assets_url', $options, $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/twilio/');
+        $corePath = $this->getOption(
+            'core_path',
+            $options,
+            $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/twilio/'
+        );
+        $assetsPath = $this->getOption(
+            'assets_path',
+            $options,
+            $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH) . 'components/twilio/'
+        );
+        $assetsUrl = $this->getOption(
+            'assets_url',
+            $options,
+            $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/twilio/'
+        );
 
         /* loads some default paths for easier management */
         $this->options = array_merge([
@@ -48,10 +65,11 @@ class Twilio {
      * namespaced system setting; by default this value is null.
      * @return mixed The option value or the default value specified.
      */
-    public function getOption($key, $options = array(), $default = null) {
+    public function getOption($key, $options = array(), $default = null)
+    {
         $option = $default;
         if (!empty($key) && is_string($key)) {
-            if ($options != null && array_key_exists($key, $options)) {
+            if ($options !== null && array_key_exists($key, $options)) {
                 $option = $options[$key];
             } elseif (array_key_exists($key, $this->options)) {
                 $option = $this->options[$key];
