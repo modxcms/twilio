@@ -4,10 +4,14 @@ require_once dirname(__FILE__, 2) . '/index.class.php';
 class TwilioUsersManagerController extends TwilioBaseManagerController
 {
     public $permission = 'twilio_manage_auth';
+
     public function getPageTitle()
     {
         return $this->modx->lexicon('twilio.users');
     }
+
+    public function process(array $scriptProperties = []) {}
+
     public function loadCustomCssJs()
     {
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/widgets/users.grid.js?v=' . $this->version);
