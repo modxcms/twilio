@@ -42,17 +42,14 @@ class Twilio
         $this->options = array_merge([
             'namespace' => $this->namespace,
             'corePath' => $corePath,
-            'modelPath' => $corePath . 'model/',
-            'snippetsPath' => $corePath . 'elements/snippets/',
+            'snippetsPath' => $corePath . 'src/Snippet/',
             'templatesPath' => $corePath . 'templates/',
             'assetsPath' => $assetsPath,
             'assetsUrl' => $assetsUrl,
             'jsUrl' => $assetsUrl . 'js/',
             'cssUrl' => $assetsUrl . 'css/',
-            'connectorUrl' => $assetsUrl . 'connector.php'
         ], $options);
 
-        $this->modx->addPackage('twilio', $this->getOption('modelPath'));
         $this->modx->lexicon->load('twilio:default');
     }
 
