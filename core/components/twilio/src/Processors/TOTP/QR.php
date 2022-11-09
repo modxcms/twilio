@@ -1,6 +1,11 @@
 <?php
+namespace MODX\Twilio\Processor\TOTP;
 
-class TwilioTotpQrProcessor extends modProcessor
+use MODX\Revolution\Processors\Processor;
+use MODX\Revolution\modUser;
+use MODX\Revolution\modUserSetting;
+
+class QR extends Processor
 {
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
@@ -8,10 +13,10 @@ class TwilioTotpQrProcessor extends modProcessor
     public function process()
     {
         $id = $this->getProperty('user');
-        $user = $this->modx->getObject('modUser', $id);
+        $user = $this->modx->getObject(modUser::class, $id);
 
         if ($user) {
-            $setting = $this->modx->getObject('modUserSetting', array('user' => $user->id, 'key' => 'twilio.totp'));
+            $setting = $this->modx->getObject(modUserSetting::class, array('user' => $user->id, 'key' => 'twilio.totp'));
             if (!$setting || !$setting->get('value')) {
                 return $this->failure();
             }
@@ -27,4 +32,3 @@ class TwilioTotpQrProcessor extends modProcessor
         return $this->failure();
     }
 }
-return 'TwilioTotpQrProcessor';

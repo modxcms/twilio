@@ -1,6 +1,8 @@
 <?php
 namespace MODX\Twilio\Snippet;
 
+use MODX\Revolution\modUser;
+
 class GetPhone extends Snippet {
 
     public function process()
@@ -13,8 +15,8 @@ class GetPhone extends Snippet {
         $username = $this->base64urlDecode($_REQUEST['lu']);
         $password = $this->base64urlDecode($_REQUEST['lp']);
 
-        /** @var \modUser $user */
-        $user = $this->modx->getObject('modUser', ['username' => $username]);
+        /** @var modUser $user */
+        $user = $this->modx->getObject(modUser::class, ['username' => $username]);
         if (!$user) {
             $this->sendError();
             return;
@@ -53,7 +55,7 @@ class GetPhone extends Snippet {
             return;
         }
 
-        /** @var \modUserProfile $profile */
+        /** @var modUserProfile $profile */
         $profile = $user->getOne('Profile');
         if (!$profile) {
             $this->sendError();

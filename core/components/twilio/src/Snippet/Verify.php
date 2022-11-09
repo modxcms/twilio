@@ -3,6 +3,9 @@
 namespace MODX\Twilio\Snippet;
 
 use MODX\Twilio\Utils;
+use MODX\Revolution\modUser;
+use MODX\Revolution\modUserSetting;
+use MODX\Revolution\Registry\modRegister;
 use Twilio\Rest\Client;
 
 class Verify extends Snippet
@@ -46,7 +49,7 @@ class Verify extends Snippet
 
 
             if ($verification_check->status === 'approved') {
-                /** @var \modUser $user */
+                /** @var modUser $user */
                 $user = $this->getUser();
 
                 $user->set('active', true);
@@ -98,11 +101,11 @@ class Verify extends Snippet
                 $profile->set('extended', $extended);
                 if ($profile->save()) {
                     $setting = $this->modx->getObject(
-                        'modUserSetting',
+                        modUserSetting::class,
                         array('user' => $user->id, 'key' => 'twilio.totp')
                     );
                     if (!$setting) {
-                        $setting = $this->modx->newObject('modUserSetting');
+                        $setting = $this->modx->newObject(modUserSetting::class);
                         $setting->set('user', $user->id);
                         $setting->set('key', 'twilio.totp');
                         $setting->set('xtype', 'combo-boolean');
@@ -127,13 +130,13 @@ class Verify extends Snippet
     private function getUser()
     {
         $username = $this->base64urlDecode($_REQUEST['lu']);
-        /** @var \modUser $user */
-        $user = $this->modx->getObject('modUser', ['username' => $username]);
+        /** @var modUser $user */
+        $user = $this->modx->getObject(modUser::class, ['username' => $username]);
 
         $this->modx->getService('registry', 'registry.modRegistry');
         $this->modx->registry->addRegister('twilio', 'registry.modFileRegister');
 
-        /** @var \modRegister $reg */
+        /** @var modRegister $reg */
         $reg = $this->modx->registry->twilio;
         $reg->connect();
         $reg->subscribe('/activation/' . $user->get('username'));
@@ -142,9 +145,9 @@ class Verify extends Snippet
         return $user;
     }
 
-    private function autoLogIn(\modUser $user)
+    private function autoLogIn(modUser $user)
     {
-        $autoLogIn = intval($this->getOption('twilioAutoLogIn', 1)) === 1;
+        $autoLogIn = (int)$this->getOption('twilioAutoLogIn', 1) === 1;
         $contexts = $this->getOption('twilioAuthenticateContexts', $this->modx->context->get('key'));
 
         if (!$autoLogIn) {

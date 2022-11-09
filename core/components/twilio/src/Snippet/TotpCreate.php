@@ -3,6 +3,8 @@
 namespace MODX\Twilio\Snippet;
 
 use Twilio\Rest\Client;
+use MODX\Revolution\modUserSetting;
+use xPDO\xPDO;
 
 class TotpCreate extends Snippet
 {
@@ -23,18 +25,18 @@ class TotpCreate extends Snippet
             return false;
         }
 
-        $setting = $this->modx->getObject('modUserSetting', array('user' => $user->id, 'key' => 'twilio.totp'));
+        $setting = $this->modx->getObject(modUserSetting::class, array('user' => $user->id, 'key' => 'twilio.totp'));
         if (!$setting) {
-            $setting = $this->modx->newObject('modUserSetting');
+            $setting = $this->modx->newObject(modUserSetting::class);
             $setting->set('user', $user->id);
             $setting->set('key', 'twilio.totp');
             $setting->set('xtype', 'combo-boolean');
         }
-        $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] setting = ".$status." REQUEST = ".$_REQUEST['status']);
+        $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] setting = ".$status." REQUEST = ".$_REQUEST['status']);
         if ($status === 0) {
             $setting->set('value', $status);
             if (!$setting->save()) {
-                $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save user setting");
+                $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save user setting");
                 return false;
             }
             $this->redirect();
@@ -64,12 +66,12 @@ class TotpCreate extends Snippet
                 );
                 $profile->set('extended', $extended);
                 if (!$profile->save()) {
-                    $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save profile");
+                    $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save profile");
                     return false;
                 }
                 $setting->set('value', $status);
                 if (!$setting->save()) {
-                    $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save user setting");
+                    $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] Failed to save user setting");
                     return false;
                 }
                 $_SESSION['twilio_totp_verified'] = true;
@@ -78,7 +80,7 @@ class TotpCreate extends Snippet
             }
             return false;
         } catch (\Exception $e) {
-            $this->modx->log(\xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] " . $e->getMessage());
+            $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] " . $e->getMessage());
             return false;
         }
     }

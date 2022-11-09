@@ -2,6 +2,8 @@
 namespace MODX\Twilio\Snippet;
 
 use MODX\Twilio\Utils;
+use MODX\Revolution\modUser;
+use MODX\Revolution\modUserProfile;
 use Twilio\Rest\Client;
 
 class SendVerification extends Snippet {
@@ -35,14 +37,14 @@ class SendVerification extends Snippet {
 
         $username = $this->base64urlDecode($_REQUEST['lu']);
 
-        /** @var \modUser $user */
-        $user = $this->modx->getObject('modUser', ['username' => $username]);
+        /** @var modUser $user */
+        $user = $this->modx->getObject(modUser::class, ['username' => $username]);
 
-        /** @var \modUserProfile $profile */
+        /** @var modUserProfile $profile */
         $profile = $user->getOne('Profile');
 
         $extended = $profile->get('extended');
-        $lastSend = !empty($extended['twilio_last_send']) ? intval($extended['twilio_last_send']) : 0;
+        $lastSend = !empty($extended['twilio_last_send']) ? (int)$extended['twilio_last_send'] : 0;
         $now = time();
 
         if ($limit !== 0 && $lastSend !== 0 && ($lastSend + $limit) > $now) {

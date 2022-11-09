@@ -1,6 +1,8 @@
 <?php
 namespace MODX\Twilio\Snippet;
 
+use MODX\Revolution\modUserSetting;
+
 class TotpQR extends Snippet
 {
     public function process()
@@ -8,7 +10,7 @@ class TotpQR extends Snippet
         $user = $this->modx->user;
 
         if ($user && $user->id !== 0) {
-            $setting = $this->modx->getObject('modUserSetting', array('user' => $user->id, 'key' => 'twilio.totp'));
+            $setting = $this->modx->getObject(modUserSetting::class, array('user' => $user->id, 'key' => 'twilio.totp'));
             if (!$setting || !$setting->get('value')) {
                 return;
             }

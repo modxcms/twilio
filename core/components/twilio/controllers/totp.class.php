@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . '/index.class.php';
-require_once dirname(dirname(__FILE__)) . '/lib/FixedBitNotation.php';
+require_once dirname(__FILE__, 2) . '/index.class.php';
+require_once dirname(__FILE__, 2) . '/lib/FixedBitNotation.php';
 
 class TwilioTotpManagerController extends TwilioBaseManagerController
 {

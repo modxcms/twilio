@@ -1,3 +1,7 @@
+Twilio 2.0.0
+===============
+- Added support for MODX 3.0
+
 Twilio 1.2.0
 ===============
 - Add Time-based One Time Password (TOTP)

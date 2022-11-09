@@ -1,0 +1,103 @@
+{
+  "name": "Twilio",
+  "lowCaseName": "twilio",
+  "description": "Twilio for MODX Revolution 3.x",
+  "author": "John Peca",
+  "version": "2.0.0",
+  "menus": [
+    {
+      "text": "twilio.users",
+      "description": "twilio.users.desc",
+      "action": "users",
+      "permissions": "twilio_manage_auth"
+    }
+  ],
+  "snippets": [
+    {
+      "name": "TwilioGetPhone",
+      "file": "TwilioGetPhone.php"
+    },
+    {
+      "name": "TwilioActivation",
+      "file": "TwilioActivation.php"
+    },
+    {
+      "name": "TwilioSendVerification",
+      "file": "TwilioSendVerification.php"
+    },
+    {
+      "name": "TwilioVerify",
+      "file": "TwilioVerify.php"
+    },
+    {
+      "name": "TwilioValidatePhone",
+      "file": "TwilioValidatePhone.php"
+    },
+    {
+      "name": "TwilioTOTPChallenge",
+      "file": "TwilioTOTPChallenge.php"
+    },
+    {
+      "name": "TwilioTOTPCreate",
+      "file": "TwilioTOTPCreate.php"
+    },
+    {
+      "name": "TwilioTOTPqr",
+      "file": "TwilioTOTPqr.php"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "Twilio",
+      "file": "Twilio.php",
+      "events": [
+        "OnBeforeManagerPageInit",
+        "OnManagerPageInit"
+      ]
+    }
+  ],
+  "systemSettings": [
+    {
+      "key": "account_sid",
+      "value": ""
+    },
+    {
+      "key": "account_token",
+      "value": "",
+      "type": "text-password"
+    },
+    {
+      "key": "service_id",
+      "value": ""
+    },
+    {
+      "key": "totp_enforce",
+      "value": "0",
+      "type": "combo-boolean"
+    },
+    {
+      "key": "totp_email_on_login",
+      "value": "0",
+      "type": "combo-boolean"
+    },
+    {
+      "key": "totp_challenge_page",
+      "value": ""
+    }
+  ],
+  "build" : {
+    "scriptsAfter": [
+      "acls.php"
+    ]
+  },
+  "dependencies": [
+    {
+      "name": "formit",
+      "version": ">=4.2.0"
+    },
+    {
+      "name": "login",
+      "version": ">=1.9.0"
+    }
+  ]
+}

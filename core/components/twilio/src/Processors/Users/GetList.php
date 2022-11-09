@@ -1,6 +1,11 @@
 <?php
+namespace MODX\Twilio\Processor\Users;
 
-class TwilioUsersGetListProcessor extends modObjectGetListProcessor
+use MODX\Revolution\Processors\Model\GetListProcessor;
+use xPDO\Om\xPDOObject;
+use xPDO\Om\xPDOQuery;
+
+class GetList extends GetListProcessor
 {
     public $classKey = 'modUser';
     public $languageTopics = array('user', 'twilio:default');
@@ -26,7 +31,7 @@ class TwilioUsersGetListProcessor extends modObjectGetListProcessor
         return $objectArray;
     }
 
-    public function prepareQueryBeforeCount($c)
+    public function prepareQueryBeforeCount(xPDOQuery $c)
     {
         $c->leftJoin('modUserProfile', 'Profile');
         $c->leftJoin(
@@ -45,7 +50,7 @@ class TwilioUsersGetListProcessor extends modObjectGetListProcessor
         return parent::prepareQueryBeforeCount($c);
     }
 
-    public function prepareQueryAfterCount($c)
+    public function prepareQueryAfterCount(xPDOQuery $c)
     {
         $c->select($this->modx->getSelectColumns(
             'modUser',
@@ -69,4 +74,3 @@ class TwilioUsersGetListProcessor extends modObjectGetListProcessor
         return parent::prepareQueryAfterCount($c);
     }
 }
-return 'TwilioUsersGetListProcessor';

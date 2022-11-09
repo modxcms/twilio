@@ -36,7 +36,7 @@ twilio.panel.Totp = function (config) {
             border: false,
             autoHeight: true,
             style: 'padding-top: 15px',
-            url: twilio.config.connector_url,
+            url: MODx.config.connector_url,
             waitMsg: _('twilio.verifying'),
             success: function (form, action) {
                 console.log(action.result);

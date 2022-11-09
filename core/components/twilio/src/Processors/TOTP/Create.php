@@ -1,8 +1,12 @@
 <?php
+namespace MODX\Twilio\Processor\TOTP;
 
 use Twilio\Rest\Client;
+use MODX\Revolution\Processors\Processor;
+use MODX\Revolution\modUser;
+use MODX\Revolution\modUserSetting;
 
-class TotpCreateProcessor extends modProcessor
+class Create extends Processor
 {
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
@@ -32,7 +36,7 @@ class TotpCreateProcessor extends modProcessor
 
     public function handleUser($id): bool
     {
-        $user = $this->modx->getObject('modUser', $id);
+        $user = $this->modx->getObject(modUser::class, $id);
 
         if ($user) {
             try {
@@ -66,11 +70,11 @@ class TotpCreateProcessor extends modProcessor
                         return false;
                     }
                     $setting = $this->modx->getObject(
-                        'modUserSetting',
+                        modUserSetting::class,
                         array('user' => $user->id, 'key' => 'twilio.totp')
                     );
                     if (!$setting) {
-                        $setting = $this->modx->newObject('modUserSetting');
+                        $setting = $this->modx->newObject(modUserSetting::class);
                         $setting->set('user', $user->id);
                         $setting->set('key', 'twilio.totp');
                         $setting->set('xtype', 'combo-boolean');
@@ -89,4 +93,3 @@ class TotpCreateProcessor extends modProcessor
         return false;
     }
 }
-return 'TotpCreateProcessor';

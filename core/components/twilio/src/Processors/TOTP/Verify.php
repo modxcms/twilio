@@ -1,8 +1,11 @@
 <?php
+namespace MODX\Twilio\Processor\TOTP;
 
 use Twilio\Rest\Client;
+use MODX\Revolution\Processors\Processor;
+use MODX\Revolution\modUser;
 
-class TotpVerifyProcessor extends modProcessor
+class Verify extends Processor
 {
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
@@ -21,7 +24,7 @@ class TotpVerifyProcessor extends modProcessor
         $deviceCode = $this->getProperty('devicecode');
         $remember = $this->getProperty('rememberdevice');
 
-        $user = $this->modx->getObject('modUser', $id);
+        $user = $this->modx->getObject(modUser::class, $id);
         if ($user) {
             $profile = $user->getOne('Profile');
             $extended = $profile->get('extended');
@@ -30,17 +33,18 @@ class TotpVerifyProcessor extends modProcessor
                 $twilio = new Client($sid, $token);
                 $verification_check = $twilio->verify->v2->services($service)
                     ->entities(str_pad($user->id, 8, '0', STR_PAD_LEFT))
-                    ->challenges
-                    ->create($userTwilio['sid'], ["authPayload" => $code]);
+                    ->factors($userTwilio['sid'])
+                    ->update(["authPayload" => $code]);
 
 
-                if ($verification_check->status === 'approved') {
+                if ($verification_check->status === 'verified') {
                     if (!empty($deviceCode) && !empty($remember)) {
                         if (empty($userTwilio['remembered'])) {
                             $userTwilio['remembered'] = array();
                         }
                         $userTwilio['remembered'][] = $deviceCode;
                     }
+                    $userTwilio['status'] = 'verified';
                     $extended['twilio_totp'] = $userTwilio;
                     $profile->set('extended', $extended);
                     $profile->set('failedlogincount', 0);
@@ -57,4 +61,3 @@ class TotpVerifyProcessor extends modProcessor
         return $this->failure('User not found');
     }
 }
-return 'TotpVerifyProcessor';

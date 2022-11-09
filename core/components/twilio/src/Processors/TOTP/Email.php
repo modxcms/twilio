@@ -1,6 +1,11 @@
 <?php
+namespace MODX\Twilio\Processor\TOTP;
 
-class TotpEmailProcessor extends modProcessor
+use MODX\Revolution\Processors\Processor;
+use MODX\Revolution\modUser;
+use MODX\Revolution\modUserSetting;
+
+class Email extends Processor
 {
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
@@ -19,9 +24,9 @@ class TotpEmailProcessor extends modProcessor
 
     public function handleUser($id): bool
     {
-        $user = $this->modx->getObject('modUser', $id);
+        $user = $this->modx->getObject(modUser::class, $id);
         if ($user) {
-            $setting = $this->modx->getObject('modUserSetting', array('user' => $user->id, 'key' => 'twilio.totp'));
+            $setting = $this->modx->getObject(modUserSetting::class, array('user' => $user->id, 'key' => 'twilio.totp'));
             if (!$setting || !$setting->get('value')) {
                 return true;
             }
@@ -47,4 +52,3 @@ class TotpEmailProcessor extends modProcessor
         return false;
     }
 }
-return 'TotpEmailProcessor';

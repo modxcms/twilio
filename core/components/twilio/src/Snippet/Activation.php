@@ -15,10 +15,10 @@ class Activation extends Snippet
             $activationTTL = 180;
         }
 
-        /** @var \modUser $user */
+        /** @var modUser $user */
         $user = $hook->getValue('register.user');
 
-        /** @var \modUserProfile $profile */
+        /** @var modUserProfile $profile */
         $profile = $hook->getValue('register.profile');
 
         $tempPassword = $this->modx->user->generatePassword();

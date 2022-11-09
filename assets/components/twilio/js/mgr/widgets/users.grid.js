@@ -16,7 +16,7 @@ twilio.grid.Users = function (config) {
         }
     });
     Ext.applyIf(config,{
-        url: twilio.config.connector_url,
+        url: MODx.config.connector_url,
         id: 'twilio-grid-users',
         baseParams: {
             action: 'users/getlist'

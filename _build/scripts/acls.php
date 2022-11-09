@@ -1,4 +1,7 @@
 <?php
+
+use xPDO\Transport\xPDOTransport;
+
 if ($object->xpdo) {
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         case xPDOTransport::ACTION_INSTALL:

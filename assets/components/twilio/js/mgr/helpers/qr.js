@@ -6,7 +6,7 @@ Ext.onReady(function() {
         +':\n\</label></div>'
         + '<div id="qrcode"><img id="qrimg" src=""></div>';
     MODx.Ajax.request({
-        url: twilio.config.connector_url,
+        url: MODx.config.connector_url,
         params:{action:'totp/qr', user: twilio.config.user.user},
         listeners:{
             'success':{fn:function(r){ document.getElementById("qrimg").src = r.object.qr;},scope:this },

@@ -1,6 +1,10 @@
 <?php
+namespace MODX\Twilio\Processor\TOTP;
 
-class TwilioTotpStatusProcessor extends modProcessor
+use MODX\Revolution\Processors\Processor;
+use MODX\Revolution\modUser;
+
+class Clear extends Processor
 {
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
@@ -9,7 +13,7 @@ class TwilioTotpStatusProcessor extends modProcessor
     {
         $id = $this->getProperty('user');
 
-        $user = $this->modx->getObject('modUser', $id);
+        $user = $this->modx->getObject(modUser::class, $id);
 
         if ($user) {
             $profile = $user->getOne('Profile');
@@ -23,4 +27,3 @@ class TwilioTotpStatusProcessor extends modProcessor
         return $this->failure();
     }
 }
-return 'TwilioTotpStatusProcessor';

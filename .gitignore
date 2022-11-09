@@ -8,6 +8,7 @@ config.core.php
 # Packages #
 ############
 _packages/*
+vendor
 
 # IDE files #
 #############

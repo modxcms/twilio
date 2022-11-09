@@ -1,5 +1,8 @@
 <?php
 
+namespace MODX\Twilio;
+
+require_once dirname(__FILE__, 2) . '/lib/FixedBitNotation.php';
 /**
  * The main Twilio service class.
  *
@@ -34,7 +37,6 @@ class Twilio {
 
         $this->modx->addPackage('twilio', $this->getOption('modelPath'));
         $this->modx->lexicon->load('twilio:default');
-        $this->autoload();
     }
 
     /**
@@ -58,11 +60,6 @@ class Twilio {
             }
         }
         return $option;
-    }
-
-    protected function autoload()
-    {
-        require_once $this->getOption('modelPath') . 'vendor/autoload.php';
     }
 
     public function getCode($user)
