@@ -54,7 +54,7 @@ twilio.panel.Totp = function (config) {
             },{
                 name: 'action',
                 xtype: 'hidden',
-                value: twilio.config.user.status === 'verified' ? 'totp/challenge' :  'totp/verify'
+                value: twilio.config.user.status === 'verified' ? 'MODX\\Twilio\\Processors\\TOTP\\Challenge' : 'MODX\\Twilio\\Processors\\TOTP\\Verify'
             },{
                 name: 'devicecode',
                 xtype: 'hidden',

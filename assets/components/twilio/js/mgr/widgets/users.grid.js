@@ -19,7 +19,7 @@ twilio.grid.Users = function (config) {
         url: MODx.config.connector_url,
         id: 'twilio-grid-users',
         baseParams: {
-            action: 'users/getlist'
+            action: 'MODX\\Twilio\\Processors\\Users\\GetList'
         }
         ,fields: ['id','username', 'profile_fullname', 'profile_email', 'totp_value', 'totp_status']
         ,sm: this.sm
