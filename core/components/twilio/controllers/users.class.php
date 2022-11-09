@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(__FILE__)) . '/index.class.php';
+require_once dirname(__FILE__, 2) . '/index.class.php';
 
 class TwilioUsersManagerController extends TwilioBaseManagerController
 {

@@ -1,6 +1,8 @@
 <?php
 
-abstract class TwilioBaseManagerController extends modExtraManagerController
+use MODX\Revolution\modManagerController;
+
+abstract class TwilioBaseManagerController extends modManagerController
 {
     public string $version = '1.0.0';
 
@@ -20,14 +22,7 @@ abstract class TwilioBaseManagerController extends modExtraManagerController
                 MODX_CORE_PATH
             ) . 'components/twilio/'
         );
-        $this->twilio = $this->modx->getService(
-            'twilio',
-            'Twilio',
-            $corePath . 'model/twilio/',
-            array(
-                'core_path' => $corePath
-            )
-        );
+        $this->twilio = $this->modx->services->get('twilio');
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/twilio.js');
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');

@@ -55,8 +55,7 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
         $profile = $user->getOne('Profile');
         $extended = $profile->get('extended');
         $userTwilio = $extended['twilio_totp'];
-        if (
-            !empty($device) &&
+        if (!empty($device) &&
             !empty($userTwilio['remembered']) &&
             in_array($device, $userTwilio['remembered'], true)
         ) {
