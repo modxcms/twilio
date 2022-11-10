@@ -32,6 +32,9 @@ class Email extends Processor
             }
             $profile = $user->getOne('Profile');
             $extended = $profile->get('extended');
+            if (!isset($extended['twilio_totp'])) {
+                return false;
+            }
             $userTwilio = $extended['twilio_totp'];
             $uri = $userTwilio['binding']['uri'];
             $qr = 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' . urlencode($uri);
