@@ -5,6 +5,7 @@ use Twilio\Rest\Client;
 use MODX\Revolution\Processors\Processor;
 use MODX\Revolution\modUser;
 use MODX\Revolution\modUserSetting;
+use xPDO\xPDO;
 
 class Create extends Processor
 {

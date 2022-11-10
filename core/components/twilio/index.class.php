@@ -27,8 +27,12 @@ abstract class TwilioBaseManagerController extends modManagerController
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');
         $extended = $profile->get('extended');
-        unset($extended['twilio_top']['binding']);
-        $userTwilio = $extended['twilio_totp'];
+        if (isset($extended['twilio_totp'])) {
+            unset($extended['twilio_top']['binding']);
+            $userTwilio = $extended['twilio_totp'];
+        } else {
+            $userTwilio = [];
+        }
         $userTwilio['user'] = $user->id;
 
         $this->twilio->options['user'] = $userTwilio;

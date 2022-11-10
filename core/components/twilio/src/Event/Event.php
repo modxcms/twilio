@@ -2,18 +2,20 @@
 
 namespace MODX\Twilio\Event;
 
+use MODX\Twilio\Twilio;
+
 abstract class Event
 {
     /** @var \modX */
     protected $modx;
 
-    /** @var \Twilio */
+    /** @var Twilio */
     protected $twilio;
 
     /** @var array */
     protected $sp = [];
 
-    public function __construct(\Twilio &$twilio, array $scriptProperties)
+    public function __construct(Twilio &$twilio, array $scriptProperties)
     {
         $this->twilio =& $twilio;
         $this->modx =& $this->twilio->modx;

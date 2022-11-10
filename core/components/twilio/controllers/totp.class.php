@@ -15,7 +15,11 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
         $this->checkDevice($deviceID, $user);
         if ($this->modx->getOption('twilio.totp_email_on_login', null, false) && !empty($deviceID)) {
             $lang = $user->getOption('manager_language');
-            $this->modx->lexicon->load("$lang:twilio:email");
+            if ($lang) {
+                $this->modx->lexicon->load("$lang:twilio:email");
+            } else {
+                $this->modx->lexicon->load("twilio:email");
+            }
             $code = $this->twilio->getCode($user);
             if ($code) {
                 $subject = $this->modx->lexicon('twilio.totp.code.email.subject');
@@ -33,6 +37,7 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
     }
     public function loadCustomCssJs()
     {
+        $this->addCss($this->twilio->getOption('cssUrl') . 'mgr.css');
         $this->addCss($this->twilio->getOption('cssUrl') . '2fa.css');
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/widgets/totp.panel.js?v=' . $this->version);
         $this->addLastJavascript($this->twilio->getOption('jsUrl') . 'mgr/sections/totp.js?v=' . $this->version);

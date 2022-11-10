@@ -39,7 +39,11 @@ class Email extends Processor
             $uri = $userTwilio['binding']['uri'];
             $qr = 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' . urlencode($uri);
             $lang = $user->getOption('manager_language');
-            $this->modx->lexicon->load("$lang:twilio:email");
+            if ($lang) {
+                $this->modx->lexicon->load("$lang:twilio:email");
+            } else {
+                $this->modx->lexicon->load("twilio:email");
+            }
             $subject = $this->modx->lexicon('twilio.totp.qr.email.subject');
             $body = $this->modx->lexicon('twilio.totp.qr.email.body', array(
                 'username' => $user->get('username'),

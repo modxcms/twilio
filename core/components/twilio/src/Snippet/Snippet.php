@@ -1,12 +1,14 @@
 <?php
 namespace MODX\Twilio\Snippet;
 
+use MODX\Twilio\Twilio;
+
 abstract class Snippet
 {
     /** @var \modX */
     protected $modx;
 
-    /** @var \Twilio */
+    /** @var Twilio */
     protected $twilio;
 
     /** @var array */
@@ -15,7 +17,7 @@ abstract class Snippet
     /** @var bool */
     protected $debug = false;
 
-    public function __construct(\Twilio &$twilio, array $sp = [])
+    public function __construct(Twilio $twilio, array $sp = [])
     {
         $this->twilio =& $twilio;
         $this->modx =& $this->twilio->modx;

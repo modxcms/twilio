@@ -11,7 +11,7 @@
  * @var modX $modx
  * @var array $scriptProperties
  */
-$twilio = $modx->getService('twilio', 'Twilio', $modx->getOption('twilio.core_path', null, $modx->getOption('core_path') . 'components/twilio/') . 'model/twilio/');
-if (!($twilio instanceof \Twilio)) return '';
+
+$twilio = new MODX\Twilio\Twilio($modx, $scriptProperties);
 
 return (new \MODX\Twilio\Snippet\GetPhone($twilio, $scriptProperties))->process();

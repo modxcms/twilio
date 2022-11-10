@@ -2,6 +2,8 @@
 
 namespace MODX\Twilio\Event;
 
+use xPDO\xPDO;
+
 class OnBeforeManagerPageInit extends Event
 {
     public function run()
@@ -12,7 +14,7 @@ class OnBeforeManagerPageInit extends Event
         if (!$user || $user->id === 0) {
             return false;
         }
-        if ($enforceTotp && !$_SESSION['twilio_totp_verified'] && $action['controller'] !== 'totp') {
+        if ($enforceTotp && !$_SESSION['twilio_totp_verified'] && $action !== 'totp') {
             $this->modx->sendRedirect(MODX_MANAGER_URL . 'index.php?a=totp&namespace=twilio');
         }
     }
