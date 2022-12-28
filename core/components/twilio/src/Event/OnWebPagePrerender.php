@@ -6,13 +6,16 @@ class OnWebPagePrerender extends Event
 {
     public function run()
     {
+        // System Wide
         $enforceTotp = $this->getOption('twilio.totp_enforce', false);
+        // User Specific
+        $userTotp = $this->getOption('twilio.totp', false);
         $totpChallenge = (int) $this->getOption('twilio.totp_challenge_page', 0);
         $user = $this->modx->user;
         if (!$user || $user->id === 0 || $this->modx->resource->id === $totpChallenge) {
             return;
         }
-        if ($enforceTotp && !$_SESSION['twilio_totp_verified'] && $totpChallenge > 0) {
+        if ($enforceTotp && $userTotp && !$_SESSION['twilio_totp_verified'] && $totpChallenge > 0) {
             if ($this->modx->getOption('twilio.totp_email_on_login', null, false)) {
                 $this->sendEmail($user);
             }

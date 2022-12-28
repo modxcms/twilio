@@ -6,13 +6,16 @@ class OnManagerPageInit extends Event
 {
     public function run()
     {
+        // System Wide
         $enforceTotp = $this->getOption('twilio.totp_enforce', false);
+        // User Specific
+        $userTotp = $this->getOption('twilio.totp', false);
         $action = $this->getOption('action');
         $user = $this->modx->user;
         if (!$user || $user->id === 0) {
             return false;
         }
-        if ($enforceTotp && $action === 'security/profile') {
+        if (($enforceTotp || $userTotp) && $action === 'security/profile') {
             $this->modx->regClientStartupScript($this->twilio->getOption('jsUrl') . 'mgr/twilio.js');
             $profile = $user->getOne('Profile');
             $extended = $profile->get('extended');
