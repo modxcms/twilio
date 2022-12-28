@@ -27,3 +27,4 @@ ehthumbs.db
 Thumbs.db
 /.php-cs-fixer.cache
 deploy*.sh
+vendor
