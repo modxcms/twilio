@@ -3,6 +3,10 @@
 abstract class TwilioBaseManagerController extends modExtraManagerController
 {
     public string $version = '1.0.0';
+    public function checkPermissions()
+    {
+        return true;
+    }
 
     public function initialize()
     {
