@@ -3,7 +3,7 @@
   "lowCaseName": "twilio",
   "description": "Twilio for MODX Revolution 2.x",
   "author": "John Peca",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "package": {
     "menus": [
       {
