@@ -1,3 +1,7 @@
+Twilio 2.0.2
+==============
+- Fixing permissions issue
+
 Twilio 2.0.0
 ===============
 - Added support for MODX 3.0
