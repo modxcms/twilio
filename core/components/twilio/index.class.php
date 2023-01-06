@@ -6,11 +6,6 @@ abstract class TwilioBaseManagerController extends modManagerController
 {
     public string $version = '1.0.0';
 
-    public function checkPermissions()
-    {
-        return $this->modx->hasPermission('twilio_manage_auth');
-    }
-
     public function initialize()
     {
         $corePath = $this->modx->getOption(

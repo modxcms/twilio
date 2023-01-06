@@ -3,7 +3,10 @@ require_once dirname(__FILE__, 2) . '/index.class.php';
 
 class TwilioUsersManagerController extends TwilioBaseManagerController
 {
-    public $permission = 'twilio_manage_auth';
+    public function checkPermissions()
+    {
+        return $this->modx->hasPermission('twilio_manage_auth');
+    }
 
     public function getPageTitle()
     {
