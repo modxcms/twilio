@@ -1,3 +1,7 @@
+Twilio 1.2.2
+===============
+- Fixing permissions issue
+
 Twilio 1.2.0
 ===============
 - Add Time-based One Time Password (TOTP)
