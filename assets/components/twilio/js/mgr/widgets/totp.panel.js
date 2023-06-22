@@ -15,7 +15,11 @@ twilio.panel.Totp = function (config) {
         localStorage.setItem('twilio_device_id', twilioDeviceId);
     } else {
         if (MODx.request.device_id == null) {
-            MODx.loadPage('totp', 'namespace=twilio&device_id=' + twilioDeviceId);
+            var url = 'namespace=twilio&device_id=' + twilioDeviceId;
+            if (MODx.request.return) {
+                url += '&return=' + MODx.request.return;
+            }
+            MODx.loadPage('totp', url);
         }
     }
     config = config || {};
@@ -39,8 +43,21 @@ twilio.panel.Totp = function (config) {
             url: MODx.config.connector_url,
             waitMsg: _('twilio.verifying'),
             success: function (form, action) {
-                console.log(action.result);
-                window.location = MODx.config.manager_url;
+                var url = MODx.config.manager_url;
+                if (MODx.request.return) {
+                    var return_url = JSON.parse(decodeURIComponent(MODx.request.return));
+                    console.log(return_url);
+                    if (return_url.a) {
+                        url += '?a=' + return_url.a;
+                    }
+                    if (return_url.namespace) {
+                        url += '&namespace=' + return_url.namespace;
+                    }
+                    if (return_url.id) {
+                        url += '&id=' + return_url.id;
+                    }
+                }
+                window.location = url;
             },
             failure: function (form, action) {
                 Ext.Msg.alert(_('error'), action.result.message);

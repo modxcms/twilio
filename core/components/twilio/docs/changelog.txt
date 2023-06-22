@@ -1,3 +1,7 @@
+Twilio 2.0.3
+==============
+- Follow Redirects on TOTP page in the manager
+
 Twilio 2.0.2
 ==============
 - Fixing permissions issue

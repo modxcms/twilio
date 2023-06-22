@@ -4,7 +4,7 @@ use MODX\Revolution\modManagerController;
 
 abstract class TwilioBaseManagerController extends modManagerController
 {
-    public string $version = '1.0.0';
+    public string $version = '2.0.3';
 
     public function checkPermissions()
     {

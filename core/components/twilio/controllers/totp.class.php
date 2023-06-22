@@ -9,7 +9,7 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
     {
         $deviceID = $_REQUEST['device_id'] ?? null;
         if (isset($_SESSION['twilio_totp_verified']) && $_SESSION['twilio_totp_verified']) {
-            $this->modx->sendRedirect(MODX_MANAGER_URL);
+            $this->modx->sendRedirect($this->getManagerUrl());
         }
         $user = $this->modx->user;
         $this->checkDevice($deviceID, $user);
@@ -65,7 +65,7 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
             in_array($device, $userTwilio['remembered'], true)
         ) {
             $_SESSION['twilio_totp_verified'] = true;
-            $this->modx->sendRedirect(MODX_MANAGER_URL);
+            $this->modx->sendRedirect($this->getManagerUrl());
         } elseif (!empty($device)) {
             $failed = $profile->get('failedlogincount') ?? 0;
             ++$failed;
@@ -81,5 +81,23 @@ class TwilioTotpManagerController extends TwilioBaseManagerController
                 $this->modx->sendRedirect(MODX_MANAGER_URL);
             }
         }
+    }
+    private function getManagerUrl()
+    {
+        $url = MODX_MANAGER_URL;
+        if ($_REQUEST['return']) {
+            $url .= '?';
+            $return = json_decode($_REQUEST['return'], true);
+            if (isset($return['a'])) {
+                $url .= '&a='.$return['a'];
+            }
+            if (isset($return['namespace'])) {
+                $url .= '&namespace='.$return['namespace'];
+            }
+            if (isset($return['id'])) {
+                $url .= '&id='.$return['id'];
+            }
+        }
+        return $url;
     }
 }
