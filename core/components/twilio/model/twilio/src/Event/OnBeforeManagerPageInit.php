@@ -16,7 +16,17 @@ class OnBeforeManagerPageInit extends Event
         // User Specific
         $userTotp = $user->getOption('twilio.totp', $user->getSettings(), false);
         if ($enforceTotp && $userTotp && !$_SESSION['twilio_totp_verified'] && $action['controller'] !== 'totp') {
-            $this->modx->sendRedirect(MODX_MANAGER_URL . 'index.php?a=totp&namespace=twilio');
+            $return = [];
+            if (isset($action['controller'])) {
+                $return['a'] = $action['controller'];
+            }
+            if (isset($action['namespace'])) {
+                $return['namespace'] = $action['namespace'];
+            }
+            if (isset($_REQUEST['id'])) {
+                $return['id'] = $_REQUEST['id'];
+            }
+            $this->modx->sendRedirect(MODX_MANAGER_URL . 'index.php?a=totp&namespace=twilio&return='.json_encode($return));
         }
     }
 }
