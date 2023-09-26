@@ -27,16 +27,33 @@ class SendVerification extends Snippet {
         $allowedChannels = Utils::explodeAndClean($allowedChannels);
         $limit = intval($this->getOption('twilioSendLimit', '15')) * 60; // to minutes
 
+        $phone = $this->modx->getPlaceholder('twilio.phone');
+
+        $phoneField = $this->getOption('twilioPhoneField', '');
+        if (!empty($phoneField)) {
+            $phone = $hook->getValue($phoneField);
+            if (empty($phone)) {
+                $hook->addError($phoneField, "Phone is required");
+                return false;
+            }
+
+            $_SESSION['twilio_phone'] = $phone;
+        }
+
         $channel = $hook->getValue('channel');
         if (!in_array($channel, $allowedChannels)) {
             $hook->addError('channel', "Invalid channel");
             return false;
         }
 
-        $username = $this->base64urlDecode($_REQUEST['lu']);
+        if (empty($phoneField)) {
+            $username = $this->base64urlDecode($_REQUEST['lu']);
 
-        /** @var \modUser $user */
-        $user = $this->modx->getObject('modUser', ['username' => $username]);
+            /** @var \modUser $user */
+            $user = $this->modx->getObject('modUser', ['username' => $username]);
+        } else {
+            $user = $this->modx->user;
+        }
 
         /** @var \modUserProfile $profile */
         $profile = $user->getOne('Profile');
@@ -57,7 +74,7 @@ class SendVerification extends Snippet {
 
             $verification = $twilio->verify->v2->services($this->service)
                 ->verifications
-                ->create($this->modx->getPlaceholder('twilio.phone'), $channel);
+                ->create($phone, $channel);
 
             if ($verification->status !== 'pending') {
                 $hook->addError('channel', "Requesting verification code failed.");
