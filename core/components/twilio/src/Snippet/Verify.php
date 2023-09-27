@@ -14,6 +14,8 @@ class Verify extends Snippet
     private string $token;
     private string $service;
 
+    private bool $phoneFromSession = false;
+
     public function process()
     {
         $this->sid = $this->modx->getOption('twilio.account_sid');
@@ -40,6 +42,12 @@ class Verify extends Snippet
         $hook =& $this->sp['hook'];
         $code = $hook->getValue('code');
         $phone = $this->modx->getPlaceholder('twilio.phone');
+        $this->phoneFromSession = intval($this->getOption('twilioPhoneFromSession', '0')) === 1;
+        $twilioPersistPhone = $this->getOption('twilioPersistPhone', '');
+
+        if ($this->phoneFromSession) {
+            $phone = $_SESSION['twilio_phone'];
+        }
 
         try {
             $twilio = new Client($this->sid, $this->token);
@@ -52,6 +60,7 @@ class Verify extends Snippet
                 /** @var modUser $user */
                 $user = $this->getUser();
 
+                if (empty($twilioPersistPhone)) {
                 $user->set('active', true);
                 $user->_fields['cachepwd'] = '';
                 $user->setDirty('cachepwd');
@@ -60,8 +69,22 @@ class Verify extends Snippet
                 $this->modx->invokeEvent('OnUserActivate', [
                     'user' => &$user,
                 ]);
+                } else {
+                    if ($twilioPersistPhone !== 'phone') {
+                        $twilioPersistPhone = 'mobilephone';
+                    }
 
-                $this->autoLogIn($user);
+                    $profile = $user->getOne('Profile');
+                    $profile->set($twilioPersistPhone, $phone);
+                    $profile->save();
+
+                    unset($_SESSION['twilio_phone']);
+                }
+
+                if (!$this->phoneFromSession) {
+                    $this->autoLogIn($user);
+                }
+
                 $this->redirect();
 
                 return true;
@@ -129,6 +152,10 @@ class Verify extends Snippet
 
     private function getUser()
     {
+        if ($this->phoneFromSession) {
+            return $this->modx->user;
+        }
+
         $username = $this->base64urlDecode($_REQUEST['lu']);
         /** @var modUser $user */
         $user = $this->modx->getObject(modUser::class, ['username' => $username]);
