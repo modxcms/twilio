@@ -75,6 +75,11 @@ class Verify extends Snippet
                     $profile->set($twilioPersistPhone, $phone);
                     $profile->save();
 
+                    $this->modx->invokeEvent('OnUserSave', [
+                        'user' => &$user,
+                        'mode' => 'upd'
+                    ]);
+
                     unset($_SESSION['twilio_phone']);
                 }
 
