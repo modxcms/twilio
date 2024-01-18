@@ -8,6 +8,11 @@ abstract class TwilioBaseManagerController extends modExtraManagerController
         return true;
     }
 
+    public function getLanguageTopics()
+    {
+        return array('twilio:default', 'user');
+    }
+
     public function initialize()
     {
         $corePath = $this->modx->getOption(
@@ -27,6 +32,7 @@ abstract class TwilioBaseManagerController extends modExtraManagerController
                 'core_path' => $corePath
             )
         );
+        $this->modx->lexicon->load('twilio:default');
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/twilio.js');
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');
@@ -42,10 +48,5 @@ abstract class TwilioBaseManagerController extends modExtraManagerController
             twilio.config.connector_url = "' . $this->twilio->getOption('connectorUrl') . '";
         });
         </script>');
-    }
-
-    public function getLanguageTopics()
-    {
-        return array('twilio:default');
     }
 }

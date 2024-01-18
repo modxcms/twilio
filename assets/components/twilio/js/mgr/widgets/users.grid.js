@@ -21,7 +21,21 @@ twilio.grid.Users = function (config) {
         baseParams: {
             action: 'users/getlist'
         }
-        ,fields: ['id','username', 'profile_fullname', 'profile_email', 'totp_value', 'totp_status']
+        ,fields: ['id',
+            'username',
+            'active',
+            'add_groups',
+            'primary_group',
+            'primary_group_name',
+            'primary_group_role',
+            'profile_blocked',
+            'profile_comment',
+            'profile_email',
+            'profile_fullname',
+            'profile_lastlogin',
+            'totp_value',
+            'totp_status'
+        ]
         ,sm: this.sm
         ,autoHeight: true
         ,paging: true
@@ -41,16 +55,70 @@ twilio.grid.Users = function (config) {
             ,sortable: true
             ,hidden: false
         },{
-            header: _('twilio.users.fullname')
+            header: _('active')
+            ,dataIndex: 'active'
+            ,width: 100
+            ,sortable: true
+            ,hidden: true
+            ,renderer: this.rendYesNo
+        },{
+            header: _('user_block')
+            ,dataIndex: 'profile_blocked'
+            ,width: 100
+            ,sortable: true
+            ,hidden: true
+            ,renderer: this.rendYesNo
+        },{
+            header: _('user_full_name')
             ,dataIndex: 'profile_fullname'
             ,width: 200
             ,sortable: true
             ,hidden: false
         },{
-            header: _('twilio.users.email')
+            header: _('email')
             ,dataIndex: 'profile_email'
             ,width: 200
             ,sortable: true
+            ,hidden: false
+        },{
+            header: _('primary_group')
+            ,dataIndex: 'primary_group_name'
+            ,width: 200
+            ,sortable: true
+            ,hidden: false
+            ,renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+                return value + ' (' + record.data.primary_group_role + ')';
+            }
+        },{
+            header: _('twilio.users.additional_groups')
+            ,dataIndex: 'add_groups'
+            ,width: 200
+            ,sortable: true
+            ,hidden: false
+            ,renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+                var groupNames = []
+                Ext.each(value, function (group, index) {
+                    groupNames.push(group.name + ' (' + group.role + ')');
+                });
+                return groupNames.join(', ');
+            }
+        },{
+            header: _('role')
+            ,dataIndex: 'primary_group_role'
+            ,width: 200
+            ,sortable: false
+            ,hidden: true
+        },{
+            header: _('comment')
+            ,dataIndex: 'profile_comment'
+            ,width: 200
+            ,sortable: false
+            ,hidden: true
+        },{
+            header: _('user_prevlogin')
+            ,dataIndex: 'profile_lastlogin'
+            ,width: 200
+            ,sortable: false
             ,hidden: false
         }, {
             header: _('twilio.users.totp_value')
@@ -286,12 +354,23 @@ Ext.extend(twilio.grid.Users, MODx.grid.Grid, {
     getSelectedAsList: function () {
         return this.selectedRecords.join();
     },
-
-    search: function (tf, newValue, oldValue) {
-        var nv = newValue || tf;
-        this.getStore().baseParams.search = Ext.isEmpty(nv) || Ext.isObject(nv) ? '' : nv;
+    filterSearch: function (comp, search) {
+        var s = this.getStore();
+        s.baseParams[comp.filterName] = search;
         this.getBottomToolbar().changePage(1);
-        return true;
+    },
+    filterCombo: function (combo, record) {
+        var s = this.getStore();
+        s.baseParams[combo.filterName] = record.data[combo.valueField];
+        this.getBottomToolbar().changePage(1);
+    },
+    exportFilters: function (comp, search) {
+        var s = this.getStore();
+        var filters = "export=true&HTTP_MODAUTH=" + MODx.siteId;
+        Object.keys(s.baseParams).forEach((key) => {
+            filters += "&" + key + "=" + s.baseParams[key];
+        });
+        window.location = this.config.url + "?" + filters;
     },
     getTbar: function (config) {
         var tbar = [];
@@ -324,28 +403,47 @@ Ext.extend(twilio.grid.Users, MODx.grid.Grid, {
                     handler: this.disableTotp,
                 }
                 ]
+            },{
+                text: _("twilio.users.export"),
+                handler: this.exportFilters,
+                scope: this,
             },'->',{
+                xtype: 'twilio-combo-use-2FA',
+                name: '2fa',
+                scope: this,
+                filterName: "2fa",
+                listeners: {
+                    select: this.filterCombo,
+                    scope: this
+                }
+            },{
+                xtype: 'twilio-combo-user-active',
+                name: 'active',
+                scope: this,
+                filterName: "active",
+                listeners: {
+                    select: this.filterCombo,
+                    scope: this
+                }
+
+            },{
                 xtype: 'textfield',
                 emptyText: _('search_ellipsis'),
                 id: 'twilio-filter-search',
+                filterName: "search",
                 listeners: {
-                    change: {
-                        fn: this.search,
-                        scope: this
-                    },
+                    change: this.filterSearch,
+                    scope: this,
                     render: {
                         fn: function (cmp) {
                             new Ext.KeyMap(cmp.getEl(), {
                                 key: Ext.EventObject.ENTER,
-                                fn: function () {
-                                    this.blur();
-                                    return true;
-                                },
-                                scope: cmp
+                                fn: this.blur,
+                                scope: cmp,
                             });
                         },
-                        scope:this
-                    }
+                        scope: this,
+                    },
                 }
             }]);
 
