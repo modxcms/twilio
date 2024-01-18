@@ -61,14 +61,14 @@ class Verify extends Snippet
                 $user = $this->getUser();
 
                 if (empty($twilioPersistPhone)) {
-                $user->set('active', true);
-                $user->_fields['cachepwd'] = '';
-                $user->setDirty('cachepwd');
-                $user->save();
+                    $user->set('active', true);
+                    $user->_fields['cachepwd'] = '';
+                    $user->setDirty('cachepwd');
+                    $user->save();
 
-                $this->modx->invokeEvent('OnUserActivate', [
+                    $this->modx->invokeEvent('OnUserActivate', [
                     'user' => &$user,
-                ]);
+                    ]);
                 } else {
                     if ($twilioPersistPhone !== 'phone') {
                         $twilioPersistPhone = 'mobilephone';
@@ -77,6 +77,11 @@ class Verify extends Snippet
                     $profile = $user->getOne('Profile');
                     $profile->set($twilioPersistPhone, $phone);
                     $profile->save();
+
+                    $this->modx->invokeEvent('OnUserSave', [
+                        'user' => &$user,
+                        'mode' => 'upd'
+                    ]);
 
                     unset($_SESSION['twilio_phone']);
                 }

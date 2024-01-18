@@ -24,6 +24,7 @@ $_lang['twilio.users.desc'] = 'Manage the authentication status of MODX users.';
 $_lang['twilio.users.username'] = 'Username';
 $_lang['twilio.users.fullname'] = 'Full Name';
 $_lang['twilio.users.email'] = 'Email';
+$_lang['twilio.users.additional_groups'] = 'Additional Groups';
 $_lang['twilio.users.totp_status'] = '2FA Status';
 $_lang['twilio.users.totp_value'] = 'Use 2FA';
 $_lang['twilio.users.enable_totp'] = 'Enable 2FA';
@@ -38,6 +39,8 @@ $_lang['twilio.users.totp_status_not_set'] = 'Not Set';
 $_lang['twilio.users.totp_status_verified'] = 'Verified';
 $_lang['twilio.users.totp_status_unverified'] = 'Awaiting Verification';
 $_lang['twilio.users.with-selected'] = 'With Selected';
+$_lang['twilio.users.export'] = 'Export';
+$_lang['twilio.user.activefilter.empty'] = 'User Status';
 // Settings
 $_lang['setting_twilio.account_sid'] = 'Account SID';
 $_lang['setting_twilio.account_sid_desc'] = 'Found under Account Info here https://console.twilio.com/';

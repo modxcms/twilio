@@ -45,6 +45,6 @@ abstract class TwilioBaseManagerController extends modManagerController
 
     public function getLanguageTopics()
     {
-        return array('twilio:default');
+        return array('twilio:default', 'user');
     }
 }

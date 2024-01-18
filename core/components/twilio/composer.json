@@ -18,7 +18,10 @@
   },
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.2.0",
+    "php": ">=7.4.0",
     "twilio/sdk": "dev-main"
+  },
+  "require-dev": {
+    "modx/revolution": "^3.0"
   }
 }

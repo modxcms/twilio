@@ -18,6 +18,7 @@ class TwilioUsersManagerController extends TwilioBaseManagerController
     public function loadCustomCssJs()
     {
         $this->addCss($this->twilio->getOption('cssUrl') . 'mgr.css');
+        $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/helpers/combo.js?v=' . $this->version);
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/widgets/users.grid.js?v=' . $this->version);
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/widgets/users.panel.js?v=' . $this->version);
         $this->addLastJavascript($this->twilio->getOption('jsUrl') . 'mgr/sections/users.js?v=' . $this->version);
