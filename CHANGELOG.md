@@ -1,3 +1,13 @@
+Twilio 2.1.1
+==============
+- Fix issue with security/profile page not loading correctly
+
+Twilio 2.1.0
+==============
+- Allow verifying phone from form field
+- Invoke OnUserSave event when setting user fields in Verify
+- Adjust the user grid to show additional useful fields and export
+
 Twilio 2.0.2
 ==============
 - Fixing permissions issue
