@@ -22,6 +22,13 @@ class OnWebPagePrerender extends Event
             $url = $this->modx->makeUrl($totpChallenge);
             $this->modx->sendRedirect($url);
         }
+        if ($enforceTotp && $userTotp && !$_SESSION['twilio_totp_verified'] && $totpChallenge === 0) {
+            if ($this->modx->getOption('twilio.totp_email_on_login', null, false)) {
+                $this->sendEmail($user);
+            }
+            $url = $this->modx->getOption('manager_url');
+            $this->modx->sendRedirect($url);
+        }
     }
 
     private function sendEmail($user): void

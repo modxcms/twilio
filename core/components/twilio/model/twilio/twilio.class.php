@@ -71,6 +71,7 @@ class Twilio {
         $extended = $profile->get('extended');
         $secret = $extended['twilio_totp']['binding']['secret'] ?? null;
         if ($secret) {
+            require_once($this->getOption('corePath') . 'lib/FixedBitNotation.php');
             $base32 = new FixedBitNotation(5, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567', true, true);
             $secret = $base32->decode($secret);
             $time = floor(time() / 30);
