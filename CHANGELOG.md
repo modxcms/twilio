@@ -1,5 +1,9 @@
-Twilio 2.1.1
+Twilio 2.1.2
 ==============
+- Enforcing 2FA for users on the frontend
+
+Twilio 2.1.1
+  ==============
 - Fix issue with security/profile page not loading correctly
 
 Twilio 2.1.0
