@@ -9,6 +9,16 @@ class TwilioUsersGetListProcessor extends modObjectGetListProcessor
     public $objectType = 'user';
     public $permission = 'twilio_manage_auth';
 
+    public function beforeQuery()
+    {
+        if ($this->getProperty('export')) {
+            $this->setProperty('start', 0);
+            $this->setProperty('limit', 0);
+        }
+
+        return parent::beforeQuery();
+    }
+
     public function prepareRow(xPDOObject $object)
     {
         $objectArray = $object->toArray();
