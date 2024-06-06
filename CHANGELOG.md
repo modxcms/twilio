@@ -1,3 +1,17 @@
+Twilio 1.3.2-pl
+==============
+- Fix issue with user export
+
+Twilio 1.3.1-pl
+===============
+- Enforcing 2FA for users on the frontend
+
+Twilio 1.3.0-pl
+===============
+- Allow verifying phone from form field
+- Invoke OnUserSave event when setting user fields in Verify
+- Adjust the user grid to show additional useful fields and export
+
 Twilio 1.2.2
 ===============
 - Fixing permissions issue
