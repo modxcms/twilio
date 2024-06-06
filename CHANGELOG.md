@@ -1,3 +1,7 @@
+Twilio 2.1.3
+==============
+- Fix issue with user export
+
 Twilio 2.1.2
 ==============
 - Enforcing 2FA for users on the frontend
