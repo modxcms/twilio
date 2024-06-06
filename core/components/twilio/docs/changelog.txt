@@ -1,3 +1,7 @@
+Twilio 1.3.3-pl
+==============
+- Update Twilio SDK
+
 Twilio 1.3.2-pl
 ==============
 - Fix issue with user export
