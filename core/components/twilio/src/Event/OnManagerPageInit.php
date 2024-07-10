@@ -30,6 +30,7 @@ class OnManagerPageInit extends Event
                 twilio.config.connector_url = "' . $this->twilio->getOption('connectorUrl') . '";
             });
             </script>');
+            $this->modx->regClientCSS($this->twilio->getOption('cssUrl') . 'mgr.css');
             $this->modx->regClientStartupScript($this->twilio->getOption('jsUrl') . 'mgr/helpers/qr.js');
         }
     }

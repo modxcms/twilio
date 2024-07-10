@@ -1,3 +1,8 @@
 .x-panel-tbar, .x-panel-tbar .x-toolbar, .x-panel-bbar, .x-panel-bbar .x-toolbar, .x-panel-btns {
   max-width: 100%;
 }
+#qrimg {
+  display: block;
+  clear: both;
+  margin: 1rem;
+}

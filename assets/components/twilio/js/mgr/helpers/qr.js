@@ -4,7 +4,7 @@ Ext.onReady(function() {
         + '<label for="qrcode" style="width:auto;" class="x-form-item-label">'+
         twilio.qrText
         +':\n\</label></div>'
-        + '<div id="qrcode"><img id="qrimg" src=""></div>');
+        + '<div id="qrcode"><img id="qrimg" src="" width="350" height="350"></div>');
     MODx.Ajax.request({
         url: MODx.config.connector_url,
         params:{action:'MODX\\Twilio\\Processors\\TOTP\\QR', user: twilio.config.user.user},
