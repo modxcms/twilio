@@ -37,7 +37,7 @@ class Email extends Processor
             }
             $userTwilio = $extended['twilio_totp'];
             $uri = $userTwilio['binding']['uri'];
-            $qr = 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' . urlencode($uri);
+            $qr = (new \chillerlan\QRCode\QRCode)->render($uri);
             $lang = $user->getOption('manager_language');
             if ($lang) {
                 $this->modx->lexicon->load("$lang:twilio:email");

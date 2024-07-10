@@ -1,3 +1,7 @@
+Twilio 2.1.4
+==============
+- Add new QR generator
+
 Twilio 2.1.3
 ==============
 - Fix issue with user export

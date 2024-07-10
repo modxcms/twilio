@@ -24,7 +24,7 @@ class QR extends Processor
             $extended = $profile->get('extended');
             $userTwilio = $extended['twilio_totp'];
             $uri = $userTwilio['binding']['uri'];
-            $qr = 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' . urlencode($uri);
+            $qr = (new \chillerlan\QRCode\QRCode)->render($uri);
 
             return $this->success('', ['qr' => $qr]);
         }

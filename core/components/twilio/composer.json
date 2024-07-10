@@ -17,9 +17,11 @@
     }
   },
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "php": ">=7.4.0",
-    "twilio/sdk": "dev-main"
+    "twilio/sdk": "^8.2",
+    "chillerlan/php-qrcode": "^5.0"
   },
   "require-dev": {
     "modx/revolution": "^3.0"
