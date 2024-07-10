@@ -17,6 +17,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.2.0",
-    "twilio/sdk": "^8.1"
+    "twilio/sdk": "^8.2",
+    "chillerlan/php-qrcode": "^3.4.1"
   }
 }
