@@ -1,10 +1,11 @@
 <?php
+
 namespace MODX\Twilio\Processors\TOTP;
 
-use Twilio\Rest\Client;
-use MODX\Revolution\Processors\Processor;
 use MODX\Revolution\modUser;
 use MODX\Revolution\modUserSetting;
+use MODX\Revolution\Processors\Processor;
+use Twilio\Rest\Client;
 use xPDO\xPDO;
 
 class Create extends Processor
@@ -51,7 +52,7 @@ class Create extends Processor
 
                 if ($verification_check->status === 'unverified') {
                     $this->modx->log(
-                        xPDO::LOG_LEVEL_ERROR,
+                        xPDO::LOG_LEVEL_INFO,
                         json_encode($verification_check->binding, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
                     );
                     $profile = $user->getOne('Profile');

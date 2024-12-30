@@ -1,12 +1,14 @@
 <?php
+
 namespace MODX\Twilio\Snippet;
 
-use MODX\Twilio\Utils;
 use MODX\Revolution\modUser;
 use MODX\Revolution\modUserProfile;
+use MODX\Twilio\Utils;
 use Twilio\Rest\Client;
 
-class SendVerification extends Snippet {
+class SendVerification extends Snippet
+{
     private string $sid;
     private string $token;
     private string $service;
@@ -14,6 +16,7 @@ class SendVerification extends Snippet {
     public function process()
     {
         $this->modx->setPlaceholder("twilio.code_sent", '');
+        $this->modx->lexicon->load('twilio:verify');
 
         $this->sid = $this->modx->getOption('twilio.account_sid');
         $this->token = $this->modx->getOption('twilio.account_token');
@@ -35,7 +38,7 @@ class SendVerification extends Snippet {
         if (!empty($phoneField)) {
             $phone = $hook->getValue($phoneField);
             if (empty($phone)) {
-                $hook->addError($phoneField, "Phone is required");
+                $hook->addError($phoneField, $this->modx->lexicon('twilio.verify.error.phone'));
                 return false;
             }
 
@@ -44,20 +47,20 @@ class SendVerification extends Snippet {
 
         $channel = $hook->getValue('channel');
         if (!in_array($channel, $allowedChannels)) {
-            $hook->addError('channel', "Invalid channel");
+            $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.channel'));
             return false;
         }
 
         if (empty($phoneField)) {
             $username = $this->base64urlDecode($_REQUEST['lu']);
 
-            /** @var \modUser $user */
+            /** @var modUser $user */
             $user = $this->modx->getObject(modUser::class, ['username' => $username]);
         } else {
             $user = $this->modx->user;
         }
 
-        /** @var \modUserProfile $profile */
+        /** @var modUserProfile $profile */
         $profile = $user->getOne('Profile');
 
         $extended = $profile->get('extended');
@@ -66,8 +69,8 @@ class SendVerification extends Snippet {
 
         if ($limit !== 0 && $lastSend !== 0 && ($lastSend + $limit) > $now) {
             $nextIn = round(($lastSend + $limit - $now) / 60);
-            $nextText = $nextIn > 1 ? ($nextIn . ' minutes') : 'a minute';
-            $hook->addError('channel', "Code was requested recently, another code can be requested in about {$nextText}");
+            $nextText = $nextIn > 1 ? ($nextIn . ' ' . $this->modx->lexicon('twilio.verify.minutes')) : $this->modx->lexicon('twilio.verify.minute');
+            $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.too_soon', ['next' => $nextText]));
             return false;
         }
 
@@ -79,7 +82,7 @@ class SendVerification extends Snippet {
                 ->create($phone, $channel);
 
             if ($verification->status !== 'pending') {
-                $hook->addError('channel', "Requesting verification code failed.");
+                $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.code_failed'));
                 return false;
             }
             $extended = $profile->get('extended');
@@ -87,10 +90,10 @@ class SendVerification extends Snippet {
             $profile->set('extended', $extended);
             $profile->save();
 
-            $this->modx->setPlaceholder("twilio.code_sent", 'Verification code was requested. Please enter it below.');
+            $this->modx->setPlaceholder("twilio.code_sent", $this->modx->lexicon('twilio.verify.code_requested'));
             return true;
         } catch (\Exception $e) {
-            $hook->addError('channel', "Requesting verification code failed.");
+            $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.code_failed'));
             return false;
         }
     }

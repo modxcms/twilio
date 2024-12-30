@@ -84,6 +84,11 @@
     {
       "key": "totp_challenge_page",
       "value": ""
+    },
+    {
+      "key": "totp_allow_expired",
+      "value": "0",
+      "type": "combo-boolean"
     }
   ],
   "build" : {

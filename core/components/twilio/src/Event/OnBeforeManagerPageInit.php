@@ -2,8 +2,6 @@
 
 namespace MODX\Twilio\Event;
 
-use xPDO\xPDO;
-
 class OnBeforeManagerPageInit extends Event
 {
     public function run()
@@ -29,7 +27,7 @@ class OnBeforeManagerPageInit extends Event
             if (isset($_REQUEST['id'])) {
                 $return['id'] = $_REQUEST['id'];
             }
-            $this->modx->sendRedirect(MODX_MANAGER_URL . 'index.php?a=totp&namespace=twilio&return='.json_encode($return));
+            $this->modx->sendRedirect(MODX_MANAGER_URL . 'index.php?a=totp&namespace=twilio&return=' . json_encode($return));
         }
     }
 }

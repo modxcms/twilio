@@ -8,15 +8,16 @@ class ValidatePhone extends Snippet
 {
     public function process()
     {
+        $this->modx->lexicon->load('twilio:verify');
         $sid = $this->modx->getOption('twilio.account_sid');
         $token = $this->modx->getOption('twilio.account_token');
 
         if (empty($sid) || empty($token)) {
-            return 'Missing Twilio system settings.';
+            return $this->modx->lexicon('twilio.verify.error.settings');
         }
 
         if (empty($this->sp['value'])) {
-            return 'Phone is required';
+            return $this->modx->lexicon('twilio.verify.error.phone');
         }
 
         try {
@@ -24,7 +25,7 @@ class ValidatePhone extends Snippet
             $twilio->lookups->v1->phoneNumbers($this->sp['value'])->fetch();
             return true;
         } catch (\Exception $e) {
-            return 'Invalid phone number';
+            return $this->modx->lexicon('twilio.verify.error.phone_invalid');
         }
     }
 

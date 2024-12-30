@@ -1,6 +1,10 @@
 <?php
+
 namespace MODX\Twilio\Snippet;
 
+use MODX\Revolution\Registry\modFileRegister;
+use MODX\Revolution\Registry\modRegister;
+use MODX\Revolution\Registry\modRegistry;
 use MODX\Twilio\Twilio;
 
 abstract class Snippet
@@ -39,7 +43,8 @@ abstract class Snippet
      * @param string $str
      * @return string
      */
-    public function base64urlEncode($str) {
+    public function base64urlEncode($str)
+    {
         return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
     }
 
@@ -50,7 +55,8 @@ abstract class Snippet
      * @param string $str
      * @return string
      */
-    public function base64urlDecode($str) {
+    public function base64urlDecode($str)
+    {
         return base64_decode(str_pad(strtr($str, '-_', '+/'), strlen($str) % 4, '=', STR_PAD_RIGHT));
     }
 
@@ -60,5 +66,16 @@ abstract class Snippet
         if ($redirect > 0) {
             $this->modx->sendRedirect($this->modx->makeUrl($redirect));
         }
+    }
+
+    protected function getRegister(): modRegister
+    {
+        if (empty($this->modx->registry)) {
+            $this->modx->registry = new modRegistry($this->modx, $this->sp);
+        }
+        $this->modx->registry->addRegister('twilio', modFileRegister::class);
+
+        /** @var modFileRegister $reg */
+        return $this->modx->registry->getRegister('twilio', modFileRegister::class);
     }
 }

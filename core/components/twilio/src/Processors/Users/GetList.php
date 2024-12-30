@@ -1,4 +1,5 @@
 <?php
+
 namespace MODX\Twilio\Processors\Users;
 
 use MODX\Revolution\modUser;
@@ -117,7 +118,7 @@ class GetList extends GetListProcessor
             modUser::class,
             'modUser',
             '',
-            ['id','username']
+            ['id', 'username']
         ));
         $c->select($this->modx->getSelectColumns(
             modUserProfile::class,
@@ -159,7 +160,7 @@ class GetList extends GetListProcessor
                 'primary_group_role',
                 'add_groups',
             ];
-            $filename = 'totp-users.'.time() .'.csv';
+            $filename = 'totp-users.' . time() . '.csv';
             $fp = fopen($filename, 'w');
             fputcsv($fp, $header);
             foreach ($array as $arr) {
@@ -176,7 +177,7 @@ class GetList extends GetListProcessor
             }
             fclose($fp);
             header('Content-type: text/csv');
-            header('Content-disposition:attachment; filename="'.$filename.'"');
+            header('Content-disposition:attachment; filename="' . $filename . '"');
             readfile($filename);
             return '';
         }

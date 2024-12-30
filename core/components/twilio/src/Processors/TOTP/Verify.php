@@ -1,9 +1,10 @@
 <?php
+
 namespace MODX\Twilio\Processors\TOTP;
 
-use Twilio\Rest\Client;
-use MODX\Revolution\Processors\Processor;
 use MODX\Revolution\modUser;
+use MODX\Revolution\Processors\Processor;
+use Twilio\Rest\Client;
 
 class Verify extends Processor
 {
@@ -55,9 +56,23 @@ class Verify extends Processor
                 }
                 return $this->failure('Invalid code');
             } catch (\Exception $e) {
-                return $this->failure($e->getMessage());
+                $message = $e->getMessage();
+                if (strpos($message, 'HTTP 404') !== false) {
+                    $canRegenerate = $this->modx->getOption('twilio.totp_allow_expired', '0') === '1';
+                    if ($canRegenerate) {
+                        $regenerate = $this->modx->runProcessor(Create::class, ['user' => $id]);
+                        if ($regenerate) {
+                            $email = $this->modx->runProcessor(Email::class, ['user' => $id]);
+                            if ($email) {
+                                return $this->failure($this->modx->lexicon('twilio.error.code_regenerated'));
+                            }
+                        }
+                        return $this->failure($this->modx->lexicon('twilio.error.code_expired'));
+                    }
+                }
+                return $this->failure($message);
             }
         }
-        return $this->failure('User not found');
+        return $this->failure($this->modx->lexicon('twilio.error.no_user'));
     }
 }

@@ -2,8 +2,8 @@
 
 namespace MODX\Twilio\Snippet;
 
-use Twilio\Rest\Client;
 use MODX\Revolution\modUserSetting;
+use Twilio\Rest\Client;
 use xPDO\xPDO;
 
 class TotpCreate extends Snippet
@@ -32,7 +32,7 @@ class TotpCreate extends Snippet
             $setting->set('key', 'twilio.totp');
             $setting->set('xtype', 'combo-boolean');
         }
-        $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] setting = ".$status." REQUEST = ".$_REQUEST['status']);
+        $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[Twilio Create TOTP] setting = " . $status . " REQUEST = " . $_REQUEST['status']);
         if ($status === 0) {
             $setting->set('value', $status);
             if (!$setting->save()) {

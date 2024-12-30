@@ -1,6 +1,8 @@
 <?php
+
 namespace MODX\Twilio\Snippet;
 
+use chillerlan\QRCode\QRCode;
 use MODX\Revolution\modUserSetting;
 
 class TotpQR extends Snippet
@@ -18,7 +20,7 @@ class TotpQR extends Snippet
             $extended = $profile->get('extended');
             $userTwilio = $extended['twilio_totp'];
             $uri = $userTwilio['binding']['uri'];
-            $qr = (new \chillerlan\QRCode\QRCode)->render($uri);
+            $qr = (new QRCode)->render($uri);
             $this->modx->setPlaceholder('twilio.qr', $qr);
             $this->modx->setPlaceholder('twilio.secret', $userTwilio['binding']['secret']);
             $this->modx->setPlaceholder('twilio.status', $userTwilio['status']);

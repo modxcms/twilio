@@ -8,7 +8,7 @@ class OnWebPagePrerender extends Event
     {
         // System Wide
         $enforceTotp = $this->getOption('twilio.totp_enforce', false);
-        $totpChallenge = (int) $this->getOption('twilio.totp_challenge_page', 0);
+        $totpChallenge = (int)$this->getOption('twilio.totp_challenge_page', 0);
         $user = $this->modx->user;
         if (!$user || $user->id === 0 || $this->modx->resource->id === $totpChallenge) {
             return;

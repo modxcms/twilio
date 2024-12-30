@@ -49,5 +49,14 @@ $_lang['setting_twilio.account_token_desc'] = 'Found under Account Info here htt
 $_lang['setting_twilio.service_id'] = 'Service ID';
 $_lang['setting_twilio.service_id_desc'] = 'Found under Services Page here https://console.twilio.com/us1/develop/verify/services';
 $_lang['setting_twilio.totp_enforce'] = 'Enforce Two-Factor Authentication on Login';
-$_lang['setting_twilio.totp_email_on_login'] = 'Email Two-Factor Authentication Code on Login (requires sha-1 encryption)';
-$_lang['setting_twilio.totp_challenge_page'] = 'Two-Factor Authentication Challenge Resource ID';
+$_lang['setting_twilio.totp_email_on_login'] = 'Email 2FA Code';
+$_lang['setting_twilio.totp_email_on_login_desc'] = 'Email Two-Factor Authentication Code on Login (requires sha-1 encryption)';
+$_lang['setting_twilio.totp_challenge_page'] = '2FA Resource ID';
+$_lang['setting_twilio.totp_challenge_page_desc'] = 'Resource ID of the page to redirect to for Two-Factor Authentication Challenge';
+$_lang['setting_twillio.totp_allow_expired'] = 'Regenerated Verification Codes';
+$_lang['setting_twillio.totp_allow_expired_desc'] = 'Allow expired two-factor verification codes to regenerate new two-factor authentication codes.';
+
+$_lang['twilio.error.no_user'] = 'User not found/specified.';
+$_lang['twilio.error.code_regenerated'] = 'Two-Factor Authentication code has been regenerated. Please check your email for the new code.';
+$_lang['twilio.error.code_expired'] = 'Two-Factor Authentication code has expired. Please contact a site admin for assistance.';
+$_lang['twilio.error.code_invalid'] = 'Two-Factor Authentication code is invalid. Please try again.';

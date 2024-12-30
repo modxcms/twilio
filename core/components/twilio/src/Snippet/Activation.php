@@ -2,6 +2,8 @@
 
 namespace MODX\Twilio\Snippet;
 
+use MODX\Revolution\Registry\modFileRegister;
+
 class Activation extends Snippet
 {
     public function process()
@@ -9,16 +11,16 @@ class Activation extends Snippet
         $hook = $this->sp['hook'];
 
         $redirectToActivationResource = intval($this->getOption('twilioRedirectToActivationResource', 1)) === 1;
-        $activationResource = (int) $this->getOption('twilioActivationResourceId', 1);
+        $activationResource = (int)$this->getOption('twilioActivationResourceId', 1);
         $activationTTL = intval($this->getOption('twilioActivationTTL', 180)); // in minutes
         if (empty($activationTTL)) {
             $activationTTL = 180;
         }
 
-        /** @var modUser $user */
+        /** @var \MODX\Revolution\modUser $user */
         $user = $hook->getValue('register.user');
 
-        /** @var modUserProfile $profile */
+        /** @var \MODX\Revolution\modUserProfile $profile */
         $profile = $hook->getValue('register.profile');
 
         $tempPassword = $this->modx->user->generatePassword();
@@ -49,11 +51,11 @@ class Activation extends Snippet
             ]);
         }
 
-        $this->modx->getService('registry', 'registry.modRegistry');
-        $this->modx->registry->addRegister('twilio', 'registry.modFileRegister');
-        $this->modx->registry->twilio->connect();
-        $this->modx->registry->twilio->subscribe('/activation/');
-        $this->modx->registry->twilio->send('/activation/', [$user->get('username') => $tempPassword], [
+        /** @var modFileRegister $reg */
+        $reg = $this->getRegister();
+        $reg->connect();
+        $reg->subscribe('/activation/');
+        $reg->send('/activation/', [$user->get('username') => $tempPassword], [
             'ttl' => $activationTTL * 60,
         ]);
 

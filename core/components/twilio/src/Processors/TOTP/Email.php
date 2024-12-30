@@ -1,9 +1,10 @@
 <?php
+
 namespace MODX\Twilio\Processors\TOTP;
 
-use MODX\Revolution\Processors\Processor;
 use MODX\Revolution\modUser;
 use MODX\Revolution\modUserSetting;
+use MODX\Revolution\Processors\Processor;
 
 class Email extends Processor
 {

@@ -6,6 +6,7 @@ require_once dirname(__FILE__, 2) . '/lib/FixedBitNotation.php';
 
 use FixedBitNotation;
 use MODX\Revolution\modX;
+
 /**
  * The main Twilio service class.
  *

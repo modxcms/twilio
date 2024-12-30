@@ -2,10 +2,10 @@
 
 namespace MODX\Twilio\Snippet;
 
-use MODX\Twilio\Utils;
 use MODX\Revolution\modUser;
 use MODX\Revolution\modUserSetting;
-use MODX\Revolution\Registry\modRegister;
+use MODX\Revolution\Registry\modFileRegister;
+use MODX\Twilio\Utils;
 use Twilio\Rest\Client;
 
 class Verify extends Snippet
@@ -67,7 +67,7 @@ class Verify extends Snippet
                     $user->save();
 
                     $this->modx->invokeEvent('OnUserActivate', [
-                    'user' => &$user,
+                        'user' => &$user,
                     ]);
                 } else {
                     if ($twilioPersistPhone !== 'phone') {
@@ -165,11 +165,8 @@ class Verify extends Snippet
         /** @var modUser $user */
         $user = $this->modx->getObject(modUser::class, ['username' => $username]);
 
-        $this->modx->getService('registry', 'registry.modRegistry');
-        $this->modx->registry->addRegister('twilio', 'registry.modFileRegister');
-
-        /** @var modRegister $reg */
-        $reg = $this->modx->registry->twilio;
+        /** @var modFileRegister $reg */
+        $reg = $this->getRegister();
         $reg->connect();
         $reg->subscribe('/activation/' . $user->get('username'));
         $reg->read();

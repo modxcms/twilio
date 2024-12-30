@@ -1,9 +1,10 @@
 <?php
+
 namespace MODX\Twilio\Processors\TOTP;
 
-use Twilio\Rest\Client;
-use MODX\Revolution\Processors\Processor;
 use MODX\Revolution\modUser;
+use MODX\Revolution\Processors\Processor;
+use Twilio\Rest\Client;
 
 class Challenge extends Processor
 {
@@ -52,11 +53,11 @@ class Challenge extends Processor
                     }
                     return $this->success();
                 }
-                return $this->failure('Invalid code');
+                return $this->failure($this->modx->lexicon('twilio.error.code_invalid'));
             } catch (\Exception $e) {
                 return $this->failure($e->getMessage());
             }
         }
-        return $this->failure('User not found');
+        return $this->failure($this->modx->lexicon('twilio.error.no_user'));
     }
 }

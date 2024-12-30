@@ -1,9 +1,13 @@
 <?php
+
 namespace MODX\Twilio\Snippet;
 
 use MODX\Revolution\modUser;
+use MODX\Revolution\modUserProfile;
+use MODX\Revolution\Registry\modFileRegister;
 
-class GetPhone extends Snippet {
+class GetPhone extends Snippet
+{
 
     public function process()
     {
@@ -15,7 +19,7 @@ class GetPhone extends Snippet {
         $username = $this->base64urlDecode($_REQUEST['lu']);
         $password = $this->base64urlDecode($_REQUEST['lp']);
 
-        /** @var modUser $user */
+        /** @var \MODX\Revolution\modUser $user */
         $user = $this->modx->getObject(modUser::class, ['username' => $username]);
         if (!$user) {
             $this->sendError();
@@ -28,11 +32,8 @@ class GetPhone extends Snippet {
             return;
         }
 
-        $this->modx->getService('registry', 'registry.modRegistry');
-        $this->modx->registry->addRegister('twilio', 'registry.modFileRegister');
-
-        /** @var \modRegister $reg */
-        $reg = $this->modx->registry->twilio;
+        /** @var modFileRegister $reg */
+        $reg = $this->getRegister();
         $reg->connect();
         $reg->subscribe('/activation/' . $user->get('username'));
         $messages = $reg->read(['remove_read' => false]);
@@ -71,7 +72,8 @@ class GetPhone extends Snippet {
         $this->modx->setPlaceholder('twilio.phone', $phone);
     }
 
-    public function sendError($id = null) {
+    public function sendError($id = null)
+    {
         $errorPage = empty($id) ? $this->getOption('errorPage', 0, true) : $id;
         if (!empty($errorPage)) {
             $url = $this->modx->makeUrl($errorPage, '', '', 'full');
