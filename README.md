@@ -163,14 +163,15 @@ Create a page with the following content:
 
 ## System Settings
 
-| key | description                                                                                                |
-| --- |------------------------------------------------------------------------------------------------------------|
-| twilio.account_sid | Twilio Account SID - Found under Account Info here https://console.twilio.com/                             |
-| twilio.account_token | Twilio Auth Token - Found under Account Info here https://console.twilio.com/                              |
-| twilio.service_id | Twilio Service ID - Found under Services Page here https://console.twilio.com/us1/develop/verify/services  |
-| twilio.totp_enforce | Enforce 2FA for all users                                                                                  |
-| twilio.totp_email_on_login | Email a code to the user when they login                                                                   |
-| twilio.totp_challenge_page | Page ID of the challenge page                                                                              |
+| key                        | description                                                                                               |
+|----------------------------|-----------------------------------------------------------------------------------------------------------|
+| twilio.account_sid         | Twilio Account SID - Found under Account Info here https://console.twilio.com/                            |
+| twilio.account_token       | Twilio Auth Token - Found under Account Info here https://console.twilio.com/                             |
+| twilio.service_id          | Twilio Service ID - Found under Services Page here https://console.twilio.com/us1/develop/verify/services |
+| twilio.totp_enforce        | Enforce 2FA for all users                                                                                 |
+| twilio.totp_email_on_login | Email a code to the user when they login                                                                  |
+| twilio.totp_challenge_page | Page ID of the challenge page                                                                             |
+| twilio.totp_allow_expired  | Allow expired two-factor verification codes to regenerate new two-factor authentication codes.            |
 
 ## Manager Page
 

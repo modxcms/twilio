@@ -1,7 +1,7 @@
 {
   "name": "Twilio",
   "lowCaseName": "twilio",
-  "description": "Twilio for MODX Revolution 2.x",
+  "description": "Twilio for MODX Revolution",
   "author": "John Peca",
   "version": "3.0.0",
   "package": {

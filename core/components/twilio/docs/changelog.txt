@@ -1,3 +1,8 @@
+Twilio 3.0.0
+==============
+- Allow expired two-factor verification codes to regenerate new two-factor authentication codes.
+- Combine MODX 2.x and 3.x branches into a single branch.
+
 Twilio 2.1.3
 ==============
 - Fix issue with user export
