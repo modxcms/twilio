@@ -8,8 +8,11 @@ class OnBeforeManagerPageInit extends Event
     {
         // System Wide
         $enforceTotp = $this->getOption('twilio.totp_enforce', false);
-        $action = $this->getOption('action');
-        $namespace = $this->getOption('namespace');
+        $action = $this->getOption('action', $_GET['a']);
+        if (is_array($action) && isset($action['controller'])) {
+            $action = $action['controller'];
+        }
+        $namespace = $this->getOption('namespace', $_GET['a']);
         $user = $this->modx->user;
         if (!$user || $user->id === 0) {
             return false;

@@ -57,6 +57,8 @@ $_lang['setting_twillio.totp_allow_expired'] = 'Regenerated Verification Codes';
 $_lang['setting_twillio.totp_allow_expired_desc'] = 'Allow expired two-factor verification codes to regenerate new two-factor authentication codes.';
 
 $_lang['twilio.error.no_user'] = 'User not found/specified.';
+$_lang['twilio.error.missing_configuration'] = 'Missing configuration';
+$_lang['twilio.error.invalid_code'] = 'Invalid code.';
 $_lang['twilio.error.code_regenerated'] = 'Two-Factor Authentication code has been regenerated. Please check your email for the new code.';
 $_lang['twilio.error.code_expired'] = 'Two-Factor Authentication code has expired. Please contact a site admin for assistance.';
 $_lang['twilio.error.code_invalid'] = 'Two-Factor Authentication code is invalid. Please try again.';

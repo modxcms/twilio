@@ -17,7 +17,7 @@ class Challenge extends Processor
         $token = $this->modx->getOption('twilio.account_token');
         $service = $this->modx->getOption('twilio.service_id');
         if (empty($sid) || empty($token) || empty($service)) {
-            return $this->failure('Missing configuration');
+            return $this->failure($this->modx->lexicon('twilio.error.missing_configuration'));
         }
 
         $id = $this->getProperty('user');

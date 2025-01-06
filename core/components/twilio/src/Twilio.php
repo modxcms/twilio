@@ -5,7 +5,6 @@ namespace MODX\Twilio;
 require_once dirname(__FILE__, 2) . '/lib/FixedBitNotation.php';
 
 use FixedBitNotation;
-use MODX\Revolution\modX;
 
 /**
  * The main Twilio service class.
@@ -19,7 +18,7 @@ class Twilio
     public $cache = null;
     public $options = [];
 
-    public function __construct(modX &$modx, array $options = [])
+    public function __construct(\modX &$modx, array $options = [])
     {
         $this->modx =& $modx;
 
@@ -38,6 +37,10 @@ class Twilio
             $options,
             $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/twilio/'
         );
+
+        if (empty($options['connectorUrl'])) {
+            $options['connectorUrl'] = $this->modx->getOption('connector_url', null, $assetsUrl . 'connector.php');
+        }
 
         /* loads some default paths for easier management */
         $this->options = array_merge([

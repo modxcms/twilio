@@ -1,8 +1,6 @@
 <?php
 
-use MODX\Revolution\modManagerController;
-
-abstract class TwilioBaseManagerController extends modManagerController
+abstract class TwilioBaseManagerController extends modExtraManagerController
 {
     public string $version = '2.0.3';
 
@@ -12,6 +10,10 @@ abstract class TwilioBaseManagerController extends modManagerController
     }
     public function initialize()
     {
+        if (!$this->modx->version) {
+            $this->modx->getVersionData();
+        }
+        $version = (int) $this->modx->version['version'];
         $corePath = $this->modx->getOption(
             'twilio.core_path',
             null,
@@ -21,7 +23,18 @@ abstract class TwilioBaseManagerController extends modManagerController
                 MODX_CORE_PATH
             ) . 'components/twilio/'
         );
-        $this->twilio = $this->modx->services->get('twilio');
+        if ($version > 2) {
+            $this->twilio = $this->modx->services->get('twilio');
+        } else {
+            $this->twilio = $this->modx->getService(
+                'twilio',
+                'Twilio',
+                $corePath . 'model/twilio/',
+                [
+                    'core_path' => $corePath
+                ]
+            );
+        }
         $this->addJavascript($this->twilio->getOption('jsUrl') . 'mgr/twilio.js');
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');
@@ -39,6 +52,7 @@ abstract class TwilioBaseManagerController extends modManagerController
         Ext.onReady(function() {
             twilio.config = ' . $this->modx->toJSON($this->twilio->options) . ';
             twilio.config.connector_url = "' . $this->twilio->getOption('connectorUrl') . '";
+            twilio.config.modxVersion = ' . $version . ';
         });
         </script>');
     }

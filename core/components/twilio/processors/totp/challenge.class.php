@@ -1,12 +1,8 @@
 <?php
 
-namespace MODX\Twilio\Processors\TOTP;
-
-use MODX\Revolution\modUser;
-use MODX\Revolution\Processors\Processor;
 use Twilio\Rest\Client;
 
-class Verify extends Processor
+class TotpVerifyProcessor extends modProcessor
 {
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
@@ -25,7 +21,7 @@ class Verify extends Processor
         $deviceCode = $this->getProperty('devicecode');
         $remember = $this->getProperty('rememberdevice');
 
-        $user = $this->modx->getObject(modUser::class, $id);
+        $user = $this->modx->getObject('modUser', $id);
         if ($user) {
             $profile = $user->getOne('Profile');
             $extended = $profile->get('extended');
@@ -34,18 +30,17 @@ class Verify extends Processor
                 $twilio = new Client($sid, $token);
                 $verification_check = $twilio->verify->v2->services($service)
                     ->entities(str_pad($user->id, 8, '0', STR_PAD_LEFT))
-                    ->factors($userTwilio['sid'])
-                    ->update(["authPayload" => $code]);
+                    ->challenges
+                    ->create($userTwilio['sid'], ["authPayload" => $code]);
 
 
-                if ($verification_check->status === 'verified') {
+                if ($verification_check->status === 'approved') {
                     if (!empty($deviceCode) && !empty($remember)) {
                         if (empty($userTwilio['remembered'])) {
                             $userTwilio['remembered'] = array();
                         }
                         $userTwilio['remembered'][] = $deviceCode;
                     }
-                    $userTwilio['status'] = 'verified';
                     $extended['twilio_totp'] = $userTwilio;
                     $profile->set('extended', $extended);
                     $profile->set('failedlogincount', 0);
@@ -56,23 +51,10 @@ class Verify extends Processor
                 }
                 return $this->failure($this->modx->lexicon('twilio.error.invalid_code'));
             } catch (\Exception $e) {
-                $message = $e->getMessage();
-                if (strpos($message, 'HTTP 404') !== false) {
-                    $canRegenerate = $this->modx->getOption('twilio.totp_allow_expired', '0') === '1';
-                    if ($canRegenerate) {
-                        $regenerate = $this->modx->runProcessor(Create::class, ['user' => $id]);
-                        if ($regenerate) {
-                            $email = $this->modx->runProcessor(Email::class, ['user' => $id]);
-                            if ($email) {
-                                return $this->failure($this->modx->lexicon('twilio.error.code_regenerated'));
-                            }
-                        }
-                        return $this->failure($this->modx->lexicon('twilio.error.code_expired'));
-                    }
-                }
-                return $this->failure($message);
+                return $this->failure($e->getMessage());
             }
         }
         return $this->failure($this->modx->lexicon('twilio.error.no_user'));
     }
 }
+return 'TotpVerifyProcessor';

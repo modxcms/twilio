@@ -1,12 +1,8 @@
 <?php
 
-namespace MODX\Twilio\Processors\TOTP;
-
-use MODX\Revolution\modUser;
-use MODX\Revolution\Processors\Processor;
 use Twilio\Rest\Client;
 
-class Verify extends Processor
+class TotpVerifyProcessor extends modProcessor
 {
     public $languageTopics = array('twilio:default');
     public $objectType = 'twilio.totp';
@@ -25,7 +21,7 @@ class Verify extends Processor
         $deviceCode = $this->getProperty('devicecode');
         $remember = $this->getProperty('rememberdevice');
 
-        $user = $this->modx->getObject(modUser::class, $id);
+        $user = $this->modx->getObject('modUser', $id);
         if ($user) {
             $profile = $user->getOne('Profile');
             $extended = $profile->get('extended');
@@ -60,9 +56,26 @@ class Verify extends Processor
                 if (strpos($message, 'HTTP 404') !== false) {
                     $canRegenerate = $this->modx->getOption('twilio.totp_allow_expired', '0') === '1';
                     if ($canRegenerate) {
-                        $regenerate = $this->modx->runProcessor(Create::class, ['user' => $id]);
+                        $corePath = $this->modx->getOption('twilio.core_path', null, $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/twilio/');
+                        $service = $this->modx->getService(
+                            'twilio',
+                            'Twilio',
+                            $corePath . 'model/twilio/',
+                            array(
+                                'core_path' => $corePath
+                            )
+                        );
+                        $regenerate = $this->modx->runProcessor(
+                            'totp/create',
+                            ['user' => $id],
+                            ['processors_path' => $service->getOption('processorsPath', null, $corePath . 'processors/')]
+                        );
                         if ($regenerate) {
-                            $email = $this->modx->runProcessor(Email::class, ['user' => $id]);
+                            $email = $this->modx->runProcessor(
+                                'totp/email',
+                                ['user' => $id],
+                                ['processors_path' => $service->getOption('processorsPath', null, $corePath . 'processors/')]
+                            );
                             if ($email) {
                                 return $this->failure($this->modx->lexicon('twilio.error.code_regenerated'));
                             }
@@ -76,3 +89,4 @@ class Verify extends Processor
         return $this->failure($this->modx->lexicon('twilio.error.no_user'));
     }
 }
+return 'TotpVerifyProcessor';

@@ -16,7 +16,7 @@ twilio.grid.Users = function (config) {
         }
     });
     Ext.applyIf(config,{
-        url: MODx.config.connector_url,
+        url: twilio.config.connector_url,
         id: 'twilio-grid-users',
         baseParams: {
             action: 'MODX\\Twilio\\Processors\\Users\\GetList'

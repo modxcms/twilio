@@ -1,0 +1,98 @@
+<?php
+
+namespace MODX\Twilio\v2\Snippet;
+
+use MODX\Twilio\Utils;
+use Twilio\Rest\Client;
+
+class SendVerification extends Snippet
+{
+    private string $sid;
+    private string $token;
+    private string $service;
+
+    public function process()
+    {
+        $this->modx->setPlaceholder("twilio.code_sent", '');
+        $this->modx->lexicon->load('twilio:verify');
+
+        $this->sid = $this->modx->getOption('twilio.account_sid');
+        $this->token = $this->modx->getOption('twilio.account_token');
+        $this->service = $this->getOption('twilioServiceId', $this->modx->getOption('twilio.service_id'));
+
+        if (empty($this->sid) || empty($this->token) || empty($this->service)) {
+            $this->modx->sendErrorPage();
+            return false;
+        }
+
+        $hook = $this->sp['hook'];
+        $allowedChannels = $this->getOption('twilioAllowedChannels', 'call,sms', true);
+        $allowedChannels = Utils::explodeAndClean($allowedChannels);
+        $limit = intval($this->getOption('twilioSendLimit', '15')) * 60; // to minutes
+
+        $phone = $this->modx->getPlaceholder('twilio.phone');
+
+        $phoneField = $this->getOption('twilioPhoneField', '');
+        if (!empty($phoneField)) {
+            $phone = $hook->getValue($phoneField);
+            if (empty($phone)) {
+                $hook->addError($phoneField, $this->modx->lexicon('twilio.verify.error.phone'));
+                return false;
+            }
+
+            $_SESSION['twilio_phone'] = $phone;
+        }
+
+        $channel = $hook->getValue('channel');
+        if (!in_array($channel, $allowedChannels)) {
+            $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.channel'));
+            return false;
+        }
+
+        if (empty($phoneField)) {
+            $username = $this->base64urlDecode($_REQUEST['lu']);
+
+            /** @var \modUser $user */
+            $user = $this->modx->getObject('modUser', ['username' => $username]);
+        } else {
+            $user = $this->modx->user;
+        }
+
+        /** @var \modUserProfile $profile */
+        $profile = $user->getOne('Profile');
+
+        $extended = $profile->get('extended');
+        $lastSend = !empty($extended['twilio_last_send']) ? intval($extended['twilio_last_send']) : 0;
+        $now = time();
+
+        if ($limit !== 0 && $lastSend !== 0 && ($lastSend + $limit) > $now) {
+            $nextIn = round(($lastSend + $limit - $now) / 60);
+            $nextText = $nextIn > 1 ? ($nextIn . ' ' . $this->modx->lexicon('twilio.verify.minutes')) : $this->modx->lexicon('twilio.verify.minute');
+            $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.too_soon', ['next' => $nextText]));
+            return false;
+        }
+
+        try {
+            $twilio = new Client($this->sid, $this->token);
+
+            $verification = $twilio->verify->v2->services($this->service)
+                ->verifications
+                ->create($phone, $channel);
+
+            if ($verification->status !== 'pending') {
+                $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.code_failed'));
+                return false;
+            }
+            $extended = $profile->get('extended');
+            $extended['twilio_last_send'] = $now;
+            $profile->set('extended', $extended);
+            $profile->save();
+
+            $this->modx->setPlaceholder("twilio.code_sent", $this->modx->lexicon('twilio.verify.code_requested'));
+            return true;
+        } catch (\Exception $e) {
+            $hook->addError('channel', $this->modx->lexicon('twilio.verify.error.code_failed'));
+            return false;
+        }
+    }
+}
