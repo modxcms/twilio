@@ -50,7 +50,7 @@ class Verify extends Snippet
             $twilio = new Client($this->sid, $this->token);
             $verification_check = $twilio->verify->v2->services($this->service)
                 ->verificationChecks
-                ->create($code, ["to" => $phone]);
+                ->create(["code"=> $code, "to" => $phone]);
 
 
             if ($verification_check->status === 'approved') {
