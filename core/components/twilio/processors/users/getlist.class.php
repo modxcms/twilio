@@ -40,7 +40,12 @@ class TwilioUsersGetListProcessor extends modObjectGetListProcessor
                 'member' => $object->get('id'),
             ]);
             if ($g == $objectArray['primary_group']) {
-                $objectArray['primary_group_role'] = $this->modx->getObject('modUserGroupRole', $role->get('role'))->get('name');
+                $grole = $this->modx->getObject('modUserGroupRole', $role->get('role'));
+                if ($grole) {
+                    $objectArray['primary_group_role'] = $grole->get('name');
+                } else {
+                    $objectArray['primary_group_role'] = 'not_set';
+                }
                 continue;
             }
             $objectArray['add_groups'][] = [

@@ -1,3 +1,7 @@
+Twilio 3.0.1
+==============
+- Fix user grid error if no role is set on a user's primary group.
+
 Twilio 3.0.0
 ==============
 - Allow expired two-factor verification codes to regenerate new two-factor authentication codes.
