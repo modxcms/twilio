@@ -12,7 +12,7 @@ class OnBeforeManagerPageInit extends Event
         if (is_array($action) && isset($action['controller'])) {
             $action = $action['controller'];
         }
-        $namespace = $this->getOption('namespace', $_GET['a']);
+        $namespace = $this->getOption('namespace', $_GET['namespace']);
         $user = $this->modx->user;
         if (!$user || $user->id === 0) {
             return false;
